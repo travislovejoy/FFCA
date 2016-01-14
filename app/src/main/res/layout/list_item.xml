@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:weightSum="1"
+    android:orientation="vertical">
+
+    <!-- Name Label -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/pos"
+            android:layout_width="50dp"
+            android:layout_height="fill_parent"
+            android:gravity="center_horizontal"
+            android:text="QB"
+            android:textSize="22dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+            android:id="@+id/name"
+            android:layout_width="215dp"
+            android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+            android:text="Colin Kaepernick"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="246dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="12/13, 220yds, 2TDs"
+                android:layout_gravity="center_horizontal|right" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/points"
+            android:layout_width="58dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="40"
+            android:textSize="22dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
