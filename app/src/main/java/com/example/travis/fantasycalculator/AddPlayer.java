@@ -1,37 +1,131 @@
 package com.example.travis.fantasycalculator;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
-public class AddPlayer extends AppCompatActivity {
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class AddPlayer extends Activity {
+
+    private ProgressDialog dialog = null;
+    private String TAG="Connect";
+    private String tag_json_array = "json_array_req";
+    private String URL = "http://192.168.0.6/getplayerinfo.php?id[]='*'";
+    private static final String TAG_NAME = "name";
+    private static final String TAG_ID = "id";
+    private static final String TAG_POS = "pos";
+    private static final String TAG_DESCRIPTION = "description";
+    private static final String TAG_TEAM = "team";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_player);
+        Intent intent = getIntent();
+        Integer value = intent.getIntExtra("pos", 0);
+
+        update_player_list(value);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_player, menu);
-        return true;
-    }
+    private void update_player_list(final int value) {
+        dialog = new ProgressDialog(this);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
-        return super.onOptionsItemSelected(item);
+        dialog.setMessage("Loading...");
+        dialog.show();
+
+        JsonObjectRequest request = new JsonObjectRequest(URL,
+                null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                ArrayList<HashMap<String, String>> list;
+                list = new ArrayList<HashMap<String, String>>();
+                Log.d(TAG, response.toString());
+
+                try {
+                    JSONArray ja = response.getJSONArray("players");
+                   // int total = 0;
+                    for (int i = 0; i < ja.length(); i++) {
+                        HashMap<String, String> contact = new HashMap<String, String>();
+                        JSONObject jobj = ja.getJSONObject(i);
+                        String name = jobj.getString("name");
+                        String id= jobj.getString("GSID");
+                        String pos = jobj.getString("pos");
+                        String team = jobj.getString("team");
+                        String description= "Not yet available";
+                        contact.put(TAG_NAME, name);
+                        contact.put(TAG_ID, id);
+                        contact.put(TAG_POS, pos);
+                        contact.put(TAG_DESCRIPTION, description);
+                        contact.put(TAG_TEAM, team);
+                        list.add(contact);
+                    }
+
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+                ListAdapter adapter = new SimpleAdapter(
+                        AddPlayer.this, list,
+                        R.layout.player_info, new String[] { TAG_NAME, TAG_POS, TAG_DESCRIPTION, TAG_TEAM}, new int[] { R.id.name,
+                        R.id.pos, R.id.description, R.id.team});
+                ListView lv = (ListView) findViewById(android.R.id.list);
+                lv.setAdapter(adapter);
+
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position,
+                                            long id) {
+
+                        String item = Integer.toString(position);
+                        HashMap<String, String> player = (HashMap) parent.getItemAtPosition(position);
+                        item += " " + player.get(TAG_ID);
+                        PlayerArray.getInstance().SwapId(value,item);
+
+                        Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
+                        Intent myIntent = new Intent(AddPlayer.this, MainActivity.class);
+                        //myIntent.putExtra("pos", position); //Optional parameters
+                        AddPlayer.this.startActivity(myIntent);
+
+                    }
+                });
+
+
+                        dialog.dismiss();
+                    }
+
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d(TAG, "Error: " + error.getMessage());
+                        dialog.dismiss();
+                    }
+                });
+
+        VolleyController.getInstance().addToRequestQueue(request, tag_json_array);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.travis.fantasycalculator;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -44,14 +45,14 @@ public class MainActivity extends Activity {
     private ProgressDialog dialog=null ;
     private String TAG="Tutorial Connect";
     private String tag_json_arry = "json_array_req";
-    private String url = "http://192.168.0.14";
+    private String url = "http://192.168.0.6";
     private String url_file="/getplayerstats.php?";
     private static final String TAG_NAME = "name";
     private static final String TAG_POS = "pos";
     private static final String TAG_DESCRIPTION = "description";
     private static final String TAG_SCORE = "score";
-    private String[] names= {"00-0024334", "00-0027948" };
-    private String[] post= {"WR", "RB" };
+    //public String[] names= {"00-0024334", "00-0027948" };
+    //private String[] post= {"WR", "RB" };
     Button b1;
 
     @Override
@@ -62,7 +63,8 @@ public class MainActivity extends Activity {
        //list=(ListView) findViewById(R.id.listView1);
        // rowdata=new ArrayList<RowData>();
         //ArrayList<HashMap<String, String>> list;
-
+        //int size= PlayerArray.getInstance().Size();
+        //Toast.makeText(getBaseContext(), Integer.toString(size), Toast.LENGTH_LONG).show();
 
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(
@@ -118,8 +120,8 @@ public class MainActivity extends Activity {
        final Spinner spinner = (Spinner) findViewById(R.id.spinner);
        String week = spinner.getSelectedItem().toString();
        String new_url=url+url_file;  //+"?name="+name;
-       for(int i=0; i<names.length; i++){
-           new_url = new_url + "name[]=" + names[i]+"&";
+       for(int i=0; i<PlayerArray.getInstance().Size(); i++){
+           new_url = new_url + "name[]=" + PlayerArray.getInstance().getID(i)+"&";
        }
        new_url+="week="+week;
        JsonObjectRequest request = new JsonObjectRequest(new_url,
@@ -188,6 +190,9 @@ public class MainActivity extends Activity {
                        item += " "+player.get(TAG_NAME);
 
                        Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
+                       Intent myIntent = new Intent(MainActivity.this, AddPlayer.class);
+                       myIntent.putExtra("pos", position); //Optional parameters
+                       MainActivity.this.startActivity(myIntent);
 
                    }
                });
