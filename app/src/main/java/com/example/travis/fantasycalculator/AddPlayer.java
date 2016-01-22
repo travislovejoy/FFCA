@@ -10,9 +10,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -31,19 +34,41 @@ public class AddPlayer extends Activity {
     private ProgressDialog dialog = null;
     private String TAG="Connect";
     private String tag_json_array = "json_array_req";
-    private String URL = "http://192.168.0.6/getplayerinfo.php?id[]='*'";
+    private String URL = "http://192.168.0.3/getplayerinfo.php?id[]='*'";
     private static final String TAG_NAME = "name";
     private static final String TAG_ID = "id";
     private static final String TAG_POS = "pos";
     private static final String TAG_DESCRIPTION = "description";
     private static final String TAG_TEAM = "team";
 
+    Button submit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_player);
         Intent intent = getIntent();
-        Integer value = intent.getIntExtra("pos", 0);
+        final Integer value = intent.getIntExtra("pos", 0);
+
+        final Spinner teamSpinner = (Spinner) findViewById(R.id.teamSpinner);
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(
+                this, R.array.TEAMS, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        teamSpinner.setAdapter(adapter);
+
+        final Spinner posSpinner = (Spinner) findViewById(R.id.positionSpinner);
+        ArrayAdapter posAdapter = ArrayAdapter.createFromResource(
+                this, R.array.pos, android.R.layout.simple_spinner_item);
+        posAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        posSpinner.setAdapter(posAdapter);
+
+        submit=(Button)findViewById(R.id.submit1);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                update_player_list(value);
+            }
+        });
 
         update_player_list(value);
     }
@@ -56,7 +81,27 @@ public class AddPlayer extends Activity {
         dialog.setMessage("Loading...");
         dialog.show();
 
-        JsonObjectRequest request = new JsonObjectRequest(URL,
+        final Spinner teamSpinner = (Spinner) findViewById(R.id.teamSpinner);
+        String team = teamSpinner.getSelectedItem().toString();
+
+        final Spinner posSpinner = (Spinner) findViewById(R.id.positionSpinner);
+        String pos = posSpinner.getSelectedItem().toString();
+
+        if(team.equals("ALL")){
+            team="'*'";
+        }
+
+        if(pos.equals("ALL")){
+            pos="'*'";
+        }
+
+        String new_URL= URL+ "&team="+ team;
+
+        new_URL+="&pos="+pos;
+
+
+
+        JsonObjectRequest request = new JsonObjectRequest(new_URL,
                 null, new Response.Listener<JSONObject>() {
 
             @Override
@@ -104,9 +149,9 @@ public class AddPlayer extends Activity {
                         String item = Integer.toString(position);
                         HashMap<String, String> player = (HashMap) parent.getItemAtPosition(position);
                         item += " " + player.get(TAG_ID);
-                        PlayerArray.getInstance().SwapId(value,item);
+                        PlayerArray.getInstance().SwapId(value, player.get(TAG_ID));
 
-                        Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
                         Intent myIntent = new Intent(AddPlayer.this, MainActivity.class);
                         //myIntent.putExtra("pos", position); //Optional parameters
                         AddPlayer.this.startActivity(myIntent);

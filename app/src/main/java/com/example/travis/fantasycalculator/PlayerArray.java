@@ -8,13 +8,17 @@ import java.util.List;
  */
 public final class PlayerArray {
 
-        private static final PlayerArray instance = new PlayerArray();
+        private static PlayerArray instance = new PlayerArray();
 
         private List<String> PlayerList = new ArrayList<String>();
 
             //PlayerList.add("00-0024334");
 
         public static PlayerArray getInstance() {
+
+            if (instance== null){
+                instance = new PlayerArray();
+            }
             return instance;
         }
 

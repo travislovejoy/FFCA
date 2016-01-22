@@ -5,8 +5,8 @@
     <string name="action_settings">Settings</string>
 
 
-    <string name="country_name">Choose a country</string>
-    <string-array name="countries">
+    <string name="week">Choose a week</string>
+    <string-array name="weeks">
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -24,6 +24,48 @@
         <item>15</item>
         <item>16</item>
         <item>17</item>
+    </string-array>
+    <string name="teams">Choose a team</string>
+    <string-array name="TEAMS">
+        <item>ALL</item>
+        <item>ARI</item>
+        <item>ATL</item>
+        <item>BAL</item>
+        <item>BUF</item>
+        <item>CAR</item>
+        <item>CHI</item>
+        <item>CIN</item>
+        <item>CLE</item>
+        <item>DAL</item>
+        <item>DEN</item>
+        <item>DET</item>
+        <item>GB</item>
+        <item>HOU</item>
+        <item>IND</item>
+        <item>JAC</item>
+        <item>KC</item>
+        <item>MIA</item>
+        <item>MIN</item>
+        <item>NE</item>
+        <item>NO</item>
+        <item>NYG</item>
+        <item>NYJ</item>
+        <item>OAK</item>
+        <item>PHI</item>
+        <item>PIT</item>
+        <item>SD</item>
+        <item>SEA</item>
+        <item>SF</item>
+        <item>STL</item>
+        <item>TB</item>
+        <item>TEN</item>
+        <item>WAS</item>
+    </string-array>
+    <string name="position">Choose a position</string>
+    <string-array name="pos">
+        <item>QB</item>
+        <item>WR</item>
+        <item>RB</item>
     </string-array>
     <string name="title_activity_add_player">Add Player</string>
 </resources>

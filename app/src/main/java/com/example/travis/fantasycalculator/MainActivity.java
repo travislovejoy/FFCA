@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
     private ProgressDialog dialog=null ;
     private String TAG="Tutorial Connect";
     private String tag_json_arry = "json_array_req";
-    private String url = "http://192.168.0.6";
+    private String url = "http://192.168.0.3";
     private String url_file="/getplayerstats.php?";
     private static final String TAG_NAME = "name";
     private static final String TAG_POS = "pos";
@@ -68,7 +68,7 @@ public class MainActivity extends Activity {
 
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(
-                this, R.array.countries, android.R.layout.simple_spinner_item);
+                this, R.array.weeks, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
@@ -121,6 +121,7 @@ public class MainActivity extends Activity {
        String week = spinner.getSelectedItem().toString();
        String new_url=url+url_file;  //+"?name="+name;
        for(int i=0; i<PlayerArray.getInstance().Size(); i++){
+           Toast.makeText(getBaseContext(), PlayerArray.getInstance().getID(i), Toast.LENGTH_LONG).show();
            new_url = new_url + "name[]=" + PlayerArray.getInstance().getID(i)+"&";
        }
        new_url+="week="+week;
@@ -189,7 +190,7 @@ public class MainActivity extends Activity {
                        HashMap<String, String> player= (HashMap)parent.getItemAtPosition(position);
                        item += " "+player.get(TAG_NAME);
 
-                       Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
+                       //Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
                        Intent myIntent = new Intent(MainActivity.this, AddPlayer.class);
                        myIntent.putExtra("pos", position); //Optional parameters
                        MainActivity.this.startActivity(myIntent);
