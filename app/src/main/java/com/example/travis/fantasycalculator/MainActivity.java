@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
     private ProgressDialog dialog=null ;
     private String TAG="Tutorial Connect";
     private String tag_json_arry = "json_array_req";
-    private String url = "http://192.168.0.3";
+    private String url = "http://192.168.0.11";
     private String url_file="/getplayerstats.php?";
     private static final String TAG_NAME = "name";
     private static final String TAG_POS = "pos";
@@ -141,7 +141,8 @@ public class MainActivity extends Activity {
                        HashMap<String, String> contact = new HashMap<String, String>();
                        JSONObject jobj = ja.getJSONObject(i);
                        String name=jobj.getString("name");
-                       String pos=jobj.getString("pos");
+                       //String pos=jobj.getString("pos");
+                       String pos= PlayerArray.getInstance().getpos(i);
                       //int pass_yards= jobj.getInt("pass_yards");
                        int score= CalculateScore(jobj);
                        total+=score;

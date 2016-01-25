@@ -67,5 +67,13 @@
         <item>WR</item>
         <item>RB</item>
     </string-array>
+    <string-array name="posNumbers">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
     <string name="title_activity_add_player">Add Player</string>
+    <string name="title_activity_create_team">CreateTeam</string>
 </resources>
