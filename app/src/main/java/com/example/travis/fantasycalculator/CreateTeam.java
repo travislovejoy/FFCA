@@ -49,18 +49,20 @@ public class CreateTeam extends AppCompatActivity {
                 int rb = Integer.valueOf(rbSpinner.getSelectedItem().toString());
                 int wr = Integer.valueOf(wrSpinner.getSelectedItem().toString());
                 int flex = Integer.valueOf(flexSpinner.getSelectedItem().toString());
-
+                String name = "default";
+                //PlayerArray team= new PlayerArray(name);
+                PlayerArray.getInstance().addTeam(name);
                 for (int i=0; i<qb; i++){
-                    PlayerArray.getInstance().addPlayer("QB","0");
+                    PlayerArray.getInstance().addPlayer("QB", "0", name);
                 }
                 for (int i=0; i<rb; i++){
-                PlayerArray.getInstance().addPlayer("RB","0");
+                    PlayerArray.getInstance().addPlayer("RB", "0", name);
                 }
                 for (int i=0; i<wr; i++){
-                    PlayerArray.getInstance().addPlayer("WR","0");
+                    PlayerArray.getInstance().addPlayer("WR", "0", name);
                 }
                 for (int i=0; i<flex; i++){
-                    PlayerArray.getInstance().addPlayer("Flex","0");
+                    PlayerArray.getInstance().addPlayer("Flex", "0", name);
                 }
                 Intent myIntent = new Intent(CreateTeam.this, MainActivity.class);
                 CreateTeam.this.startActivity(myIntent);

@@ -49,6 +49,7 @@ public class AddPlayer extends Activity {
         setContentView(R.layout.add_player);
         Intent intent = getIntent();
         final Integer value = intent.getIntExtra("pos", 0);
+        final String teamName= intent.getStringExtra("teamName");
 
         final Spinner teamSpinner = (Spinner) findViewById(R.id.teamSpinner);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(
@@ -66,14 +67,14 @@ public class AddPlayer extends Activity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                update_player_list(value);
+                update_player_list(value, teamName);
             }
         });
 
-        update_player_list(value);
+        update_player_list(value, teamName);
     }
 
-    private void update_player_list(final int value) {
+    private void update_player_list(final int value, final String teamName) {
         dialog = new ProgressDialog(this);
 
 
@@ -149,7 +150,7 @@ public class AddPlayer extends Activity {
                         String item = Integer.toString(position);
                         HashMap<String, String> player = (HashMap) parent.getItemAtPosition(position);
                         item += " " + player.get(TAG_ID);
-                        PlayerArray.getInstance().SwapId(value, player.get(TAG_ID));
+                        PlayerArray.getInstance().SwapId(value, player.get(TAG_ID),teamName);
 
                         //Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
                         Intent myIntent = new Intent(AddPlayer.this, MainActivity.class);

@@ -1,6 +1,7 @@
 package com.example.travis.fantasycalculator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,20 +12,20 @@ public final class PlayerArray {
 
         private static PlayerArray instance = new PlayerArray();
 
-        public List<Player> PlayerList = new ArrayList<Player>();
-
-            //PlayerList.add("00-0024334");
+        //public List<Player> PlayerList = new ArrayList<Player>();
+        public HashMap<String, List<Player>> Teams= new HashMap<>();
+                    //PlayerList.add("00-0024334");
 
         public static PlayerArray getInstance() {
 
             if (instance== null){
                 instance = new PlayerArray();
-            }
-            return instance;
+            }return instance;
         }
 
         public PlayerArray() {
             //PlayerList.add(Player("WR","00-0024334"));
+            //Teams.put(teamName,PlayerList);
 
             //Player newplayer= new Player("WR","00-0024334");
             //PlayerList.add("00-0027948");
@@ -34,29 +35,34 @@ public final class PlayerArray {
             //PlayerList.add(new Player("QB","0"));
         }
 
-        public int Size(){
-            return PlayerList.size();
-
+        public int Size(String teamName){
+            //return PlayerList.size();
+            return Teams.get(teamName).size();
         }
 
-        public String getID(int pos){
+        public String getID(int pos, String teamName){
 
             //Player newplayer= PlayerList.get(pos);
-            return PlayerList.get(pos).id;
+            return Teams.get(teamName).get(pos).id;
         }
 
-        public void SwapId(int pos, String newId){
-            PlayerList.get(pos).id=newId;
+        public void SwapId(int pos, String newId, String teamName){
+            Teams.get(teamName).get(pos).id=newId;
             return;
         }
 
-        public String getpos(int pos){
-            return PlayerList.get(pos).position;
+        public String getpos(int pos, String teamName){
+            return Teams.get(teamName).get(pos).position;
         }
 
-        public void addPlayer(String pos, String id){
-            PlayerList.add(new Player(pos, id));
+        public void addPlayer(String pos, String id, String teamName){
+            Teams.get(teamName).add(new Player(pos, id));
             return;
+        }
+
+        public void addTeam(String teamName){
+            List<Player> PlayerList = new ArrayList<Player>();
+            Teams.put(teamName,PlayerList);
         }
 
 }

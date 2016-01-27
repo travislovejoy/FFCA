@@ -115,14 +115,14 @@ public class MainActivity extends Activity {
 
        dialog.setMessage("Loading...");
        dialog.show();
-
+       final String teamName= "default";
        HashMap<String, String> params = new HashMap<String, String>();
        final Spinner spinner = (Spinner) findViewById(R.id.spinner);
        String week = spinner.getSelectedItem().toString();
        String new_url=url+url_file;  //+"?name="+name;
-       for(int i=0; i<PlayerArray.getInstance().Size(); i++){
-           Toast.makeText(getBaseContext(), PlayerArray.getInstance().getID(i), Toast.LENGTH_LONG).show();
-           new_url = new_url + "name[]=" + PlayerArray.getInstance().getID(i)+"&";
+       for(int i=0; i<PlayerArray.getInstance().Size(teamName); i++){
+           Toast.makeText(getBaseContext(), PlayerArray.getInstance().getID(i,teamName), Toast.LENGTH_LONG).show();
+           new_url = new_url + "name[]=" + PlayerArray.getInstance().getID(i,teamName)+"&";
        }
        new_url+="week="+week;
        JsonObjectRequest request = new JsonObjectRequest(new_url,
@@ -142,7 +142,7 @@ public class MainActivity extends Activity {
                        JSONObject jobj = ja.getJSONObject(i);
                        String name=jobj.getString("name");
                        //String pos=jobj.getString("pos");
-                       String pos= PlayerArray.getInstance().getpos(i);
+                       String pos= PlayerArray.getInstance().getpos(i, teamName);
                       //int pass_yards= jobj.getInt("pass_yards");
                        int score= CalculateScore(jobj);
                        total+=score;
@@ -194,6 +194,7 @@ public class MainActivity extends Activity {
                        //Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
                        Intent myIntent = new Intent(MainActivity.this, AddPlayer.class);
                        myIntent.putExtra("pos", position); //Optional parameters
+                       myIntent.putExtra("teamName", teamName);
                        MainActivity.this.startActivity(myIntent);
 
                    }
