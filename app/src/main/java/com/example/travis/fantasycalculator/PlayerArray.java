@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Created by Travis on 1/21/2016.
@@ -62,7 +63,19 @@ public final class PlayerArray {
 
         public void addTeam(String teamName){
             List<Player> PlayerList = new ArrayList<Player>();
-            Teams.put(teamName,PlayerList);
+            Teams.put(teamName, PlayerList);
+            //Teams.put("blah", PlayerList);
+        }
+
+        public boolean checkKey(String teamName){
+            if(Teams.containsKey(teamName)){
+                return false;
+            }
+            return true;
+        }
+
+        public Set<String> getKeys(){
+             return Teams.keySet();
         }
 
 }

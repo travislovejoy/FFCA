@@ -88,9 +88,17 @@
         android:layout_height="wrap_content"
         android:text="Create Team"
         android:id="@+id/create"
+        android:layout_below="@+id/teamName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="34dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/teamName"
         android:layout_below="@+id/flexSpinner"
-        android:layout_alignLeft="@+id/flexSpinner"
-        android:layout_alignStart="@+id/flexSpinner"
-        android:layout_marginLeft="31dp"
-        android:layout_marginStart="31dp" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="Enter team name" />
 </RelativeLayout>

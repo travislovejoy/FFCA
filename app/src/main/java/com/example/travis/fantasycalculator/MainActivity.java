@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,8 +52,6 @@ public class MainActivity extends Activity {
     private static final String TAG_POS = "pos";
     private static final String TAG_DESCRIPTION = "description";
     private static final String TAG_SCORE = "score";
-    //public String[] names= {"00-0024334", "00-0027948" };
-    //private String[] post= {"WR", "RB" };
     Button b1;
 
     @Override
@@ -60,17 +59,19 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       //list=(ListView) findViewById(R.id.listView1);
-       // rowdata=new ArrayList<RowData>();
-        //ArrayList<HashMap<String, String>> list;
-        //int size= PlayerArray.getInstance().Size();
-        //Toast.makeText(getBaseContext(), Integer.toString(size), Toast.LENGTH_LONG).show();
-
+        Set<String> keys = PlayerArray.getInstance().getKeys();
+        String[] keyArray = keys.toArray(new String[keys.size()]);
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(
                 this, R.array.weeks, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
+        final Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(
+            this, android.R.layout.simple_spinner_item,keyArray);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner2.setAdapter(adapter2);
 
         b1=(Button)findViewById(R.id.submit);
         b1.setOnClickListener(new View.OnClickListener() {
@@ -79,8 +80,7 @@ public class MainActivity extends Activity {
                 update_score();
             }
         });
-        //ArrayList<HashMap<String, String>> list;
-        //list= new ArrayList<HashMap<String, String>>();
+
 
         update_score();
 
@@ -115,14 +115,15 @@ public class MainActivity extends Activity {
 
        dialog.setMessage("Loading...");
        dialog.show();
-       final String teamName= "default";
+
        HashMap<String, String> params = new HashMap<String, String>();
        final Spinner spinner = (Spinner) findViewById(R.id.spinner);
+       final Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
        String week = spinner.getSelectedItem().toString();
-       String new_url=url+url_file;  //+"?name="+name;
-       for(int i=0; i<PlayerArray.getInstance().Size(teamName); i++){
-           Toast.makeText(getBaseContext(), PlayerArray.getInstance().getID(i,teamName), Toast.LENGTH_LONG).show();
-           new_url = new_url + "name[]=" + PlayerArray.getInstance().getID(i,teamName)+"&";
+       final String team= spinner2.getSelectedItem().toString();
+       String new_url=url+url_file;
+       for(int i=0; i<PlayerArray.getInstance().Size(team); i++){
+          new_url = new_url + "name[]=" + PlayerArray.getInstance().getID(i,team)+"&";
        }
        new_url+="week="+week;
        JsonObjectRequest request = new JsonObjectRequest(new_url,
@@ -142,11 +143,9 @@ public class MainActivity extends Activity {
                        JSONObject jobj = ja.getJSONObject(i);
                        String name=jobj.getString("name");
                        //String pos=jobj.getString("pos");
-                       String pos= PlayerArray.getInstance().getpos(i, teamName);
-                      //int pass_yards= jobj.getInt("pass_yards");
+                       String pos= PlayerArray.getInstance().getpos(i, team);
                        int score= CalculateScore(jobj);
                        total+=score;
-                       //int score= 10;
                        String description= "Not yet available";
                        String scores= Integer.toString(score);
                        contact.put(TAG_NAME, name);
@@ -154,15 +153,7 @@ public class MainActivity extends Activity {
                        contact.put(TAG_DESCRIPTION, description);
                        contact.put(TAG_SCORE, scores);
                        list.add(contact);
-                       //String img_url;
-                       //String combo = name+ " "+description;
 
-                       //TextView tv1 = (TextView)findViewById(R.id.textveiw);
-                       //tv1.setText(combo);
-
-                       //img_url = response.getJSONObject(i).getString("img_url");
-
-                       // rowdata.add(new RowData(title, description));
                    }
                    TextView text = (TextView) findViewById(R.id.total);
                    text.setText("total   "+ total);
@@ -172,8 +163,6 @@ public class MainActivity extends Activity {
                    // TODO Auto-generated catch block
                    e.printStackTrace();
                }
-               //adapter=new CustomAdapter(MainActivity.this, rowdata);
-               // list.setAdapter(adapter);
                ListAdapter adapter = new SimpleAdapter(
                        MainActivity.this, list,
                        R.layout.list_item, new String[] { TAG_NAME, TAG_POS, TAG_DESCRIPTION, TAG_SCORE}, new int[] { R.id.name,
@@ -194,7 +183,7 @@ public class MainActivity extends Activity {
                        //Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
                        Intent myIntent = new Intent(MainActivity.this, AddPlayer.class);
                        myIntent.putExtra("pos", position); //Optional parameters
-                       myIntent.putExtra("teamName", teamName);
+                       myIntent.putExtra("teamName", team);
                        MainActivity.this.startActivity(myIntent);
 
                    }

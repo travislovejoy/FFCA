@@ -27,6 +27,11 @@
             android:id="@+id/spinner"
             android:gravity="right" />
 
+        <Spinner
+            android:layout_width="84dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner2" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="35dp"
