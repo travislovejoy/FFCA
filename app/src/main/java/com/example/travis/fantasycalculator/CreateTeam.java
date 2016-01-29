@@ -4,17 +4,11 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
-
-import java.util.Arrays;
-import java.util.Set;
 
 public class CreateTeam extends AppCompatActivity {
     Button CreateTeam;
@@ -41,6 +35,12 @@ public class CreateTeam extends AppCompatActivity {
         wrAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         wrSpinner.setAdapter(wrAdapter);
 
+        final Spinner teSpinner = (Spinner) findViewById(R.id.teSpinner);
+        ArrayAdapter teAdapter = ArrayAdapter.createFromResource(
+                this, R.array.posNumbers, android.R.layout.simple_spinner_item);
+        teAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        teSpinner.setAdapter(teAdapter);
+
         final Spinner flexSpinner = (Spinner) findViewById(R.id.flexSpinner);
         ArrayAdapter flexAdapter = ArrayAdapter.createFromResource(
                 this, R.array.posNumbers, android.R.layout.simple_spinner_item);
@@ -64,6 +64,7 @@ public class CreateTeam extends AppCompatActivity {
                     int rb = Integer.valueOf(rbSpinner.getSelectedItem().toString());
                     int wr = Integer.valueOf(wrSpinner.getSelectedItem().toString());
                     int flex = Integer.valueOf(flexSpinner.getSelectedItem().toString());
+                    int te = Integer.valueOf(teSpinner.getSelectedItem().toString());
                     //String name = "default";
                     //PlayerArray team= new PlayerArray(name);
                     PlayerArray.getInstance().addTeam(name);
@@ -76,10 +77,16 @@ public class CreateTeam extends AppCompatActivity {
                     for (int i = 0; i < wr; i++) {
                         PlayerArray.getInstance().addPlayer("WR", "0", name);
                     }
+                    for (int i = 0; i < te; i++) {
+                        PlayerArray.getInstance().addPlayer("TE", "0", name);
+                    }
                     for (int i = 0; i < flex; i++) {
                         PlayerArray.getInstance().addPlayer("Flex", "0", name);
                     }
-                   Intent myIntent = new Intent(CreateTeam.this, MainActivity.class);
+                   Intent myIntent = new Intent(CreateTeam.this, TeamScore.class);
+                    String week= "1";
+                    myIntent.putExtra("week", week); //Optional parameters
+                    //myIntent.putExtra("teamName", name);
                    CreateTeam.this.startActivity(myIntent);
 
                 }

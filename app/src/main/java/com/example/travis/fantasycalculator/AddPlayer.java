@@ -40,6 +40,7 @@ public class AddPlayer extends Activity {
     private static final String TAG_POS = "pos";
     private static final String TAG_DESCRIPTION = "description";
     private static final String TAG_TEAM = "team";
+    private String weeks;
 
     Button submit;
 
@@ -50,31 +51,27 @@ public class AddPlayer extends Activity {
         Intent intent = getIntent();
         final Integer value = intent.getIntExtra("pos", 0);
         final String teamName= intent.getStringExtra("teamName");
-
+        weeks= intent.getStringExtra("week");
+        final String position= intent.getStringExtra("position");
         final Spinner teamSpinner = (Spinner) findViewById(R.id.teamSpinner);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(
                 this, R.array.TEAMS, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         teamSpinner.setAdapter(adapter);
 
-        final Spinner posSpinner = (Spinner) findViewById(R.id.positionSpinner);
-        ArrayAdapter posAdapter = ArrayAdapter.createFromResource(
-                this, R.array.pos, android.R.layout.simple_spinner_item);
-        posAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        posSpinner.setAdapter(posAdapter);
 
         submit=(Button)findViewById(R.id.submit1);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                update_player_list(value, teamName);
+                update_player_list(value, teamName, position);
             }
         });
 
-        update_player_list(value, teamName);
+        update_player_list(value, teamName, position);
     }
 
-    private void update_player_list(final int value, final String teamName) {
+    private void update_player_list(final int value, final String teamName, String pos) {
         dialog = new ProgressDialog(this);
 
 
@@ -85,15 +82,18 @@ public class AddPlayer extends Activity {
         final Spinner teamSpinner = (Spinner) findViewById(R.id.teamSpinner);
         String team = teamSpinner.getSelectedItem().toString();
 
-        final Spinner posSpinner = (Spinner) findViewById(R.id.positionSpinner);
-        String pos = posSpinner.getSelectedItem().toString();
+        //final Spinner posSpinner = (Spinner) findViewById(R.id.positionSpinner);
+        //String pos = posSpinner.getSelectedItem().toString();
 
         if(team.equals("ALL")){
             team="'*'";
         }
 
-        if(pos.equals("ALL")){
-            pos="'*'";
+        if(pos.equals("Flex")){
+            pos="'QB','WR','TE','RB'";
+        }
+        else{
+            pos="'"+pos+"'";
         }
 
         String new_URL= URL+ "&team="+ team;
@@ -153,8 +153,10 @@ public class AddPlayer extends Activity {
                         PlayerArray.getInstance().SwapId(value, player.get(TAG_ID),teamName);
 
                         //Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
-                        Intent myIntent = new Intent(AddPlayer.this, MainActivity.class);
-                        //myIntent.putExtra("pos", position); //Optional parameters
+                        Intent myIntent = new Intent(AddPlayer.this, TeamScore.class);
+
+                        myIntent.putExtra("week", weeks); //Optional parameters
+                        //myIntent.putExtra("teamName", teamName);
                         AddPlayer.this.startActivity(myIntent);
 
                     }

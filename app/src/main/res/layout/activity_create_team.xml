@@ -68,17 +68,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Flex"
+        android:text="TE"
         android:id="@+id/textView6"
         android:layout_below="@+id/textView5"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:layout_alignRight="@+id/textView4"
+        android:layout_alignEnd="@+id/textView4" />
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/flexSpinner"
+        android:id="@+id/teSpinner"
         android:layout_alignTop="@+id/textView6"
         android:layout_alignLeft="@+id/wrSpinner"
         android:layout_alignStart="@+id/wrSpinner" />
@@ -97,8 +99,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/teamName"
-        android:layout_below="@+id/flexSpinner"
+        android:hint="Enter team name"
+        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="Enter team name" />
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/flexSpinner"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_alignLeft="@+id/teSpinner"
+        android:layout_alignStart="@+id/teSpinner" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Flex"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/teSpinner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
