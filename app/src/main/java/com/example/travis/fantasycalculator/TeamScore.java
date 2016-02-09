@@ -1,8 +1,10 @@
 package com.example.travis.fantasycalculator;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -41,12 +43,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class TeamScore extends Activity {
+public class TeamScore extends TestDrawer {
 
         private ProgressDialog dialog=null ;
         private String TAG="Tutorial Connect";
         private String tag_json_arry = "json_array_req";
-        private String url = "http://192.168.0.11";
+        private String url = "http://192.168.0.5";
         private String url_file="/getplayerstats.php?";
         private static final String TAG_NAME = "name";
         private static final String TAG_POS = "pos";
@@ -57,7 +59,10 @@ public class TeamScore extends Activity {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
+            LayoutInflater inflater = (LayoutInflater) this
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View contentView= inflater.inflate(R.layout.activity_main, null, false);
+            drawer.addView(contentView, 0);
 
             Intent intent = getIntent();
             //final String teamName= intent.getStringExtra("teamName");
