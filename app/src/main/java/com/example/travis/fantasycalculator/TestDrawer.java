@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.HashMap;
 
@@ -32,7 +33,7 @@ public class TestDrawer extends AppCompatActivity
 
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        String[] osArray = { "Team Score", "Create Team" };
+        String[] osArray = { "Team Score", "Create Team", "DeleteTeam" };
         ListView mDrawerList = (ListView)findViewById(R.id.navList);
         ArrayAdapter mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
@@ -107,12 +108,30 @@ public class TestDrawer extends AppCompatActivity
 
     private void setActivity(int position){
         if (position==0){
-            Intent myIntent = new Intent(TestDrawer.this, TeamScore.class);
-            TestDrawer.this.startActivity(myIntent);
+            if(PlayerArray.getInstance().Teams.size()>0) {
+                Intent myIntent = new Intent(TestDrawer.this, TeamScore.class);
+                myIntent.putExtra("week", "1");
+                TestDrawer.this.startActivity(myIntent);
+            }
+            else{
+                String message= "No teams to display";
+                Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
+            }
         }
         if (position==1){
             Intent myIntent = new Intent(TestDrawer.this, CreateTeam.class);
             TestDrawer.this.startActivity(myIntent);
+        }
+        if (position==2){
+            if(PlayerArray.getInstance().Teams.size()>0) {
+                Intent myIntent = new Intent(TestDrawer.this, DeleteTeam.class);
+                //myIntent.putExtra("week", "1");
+                TestDrawer.this.startActivity(myIntent);
+            }
+            else{
+                String message= "No teams to display";
+                Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
+            }
         }
         else{
             return;

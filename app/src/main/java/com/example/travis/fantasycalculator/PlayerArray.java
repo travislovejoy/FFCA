@@ -78,4 +78,8 @@ public final class PlayerArray {
              return Teams.keySet();
         }
 
+        public void deleteTeam(String key){
+            Teams.remove(key);
+        }
+
 }
