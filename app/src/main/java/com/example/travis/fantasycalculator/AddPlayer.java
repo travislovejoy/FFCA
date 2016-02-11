@@ -34,13 +34,13 @@ public class AddPlayer extends Activity {
     private ProgressDialog dialog = null;
     private String TAG="Connect";
     private String tag_json_array = "json_array_req";
-    private String URL = "http://192.168.0.5/getplayerinfo.php?id[]='*'";
+    private String URL = "http://192.168.0.2/getplayerinfo.php?id[]='*'";
     private static final String TAG_NAME = "name";
     private static final String TAG_ID = "id";
     private static final String TAG_POS = "pos";
     private static final String TAG_DESCRIPTION = "description";
     private static final String TAG_TEAM = "team";
-    private String weeks;
+
 
     Button submit;
 
@@ -51,7 +51,7 @@ public class AddPlayer extends Activity {
         Intent intent = getIntent();
         final Integer value = intent.getIntExtra("pos", 0);
         final String teamName= intent.getStringExtra("teamName");
-        weeks= intent.getStringExtra("week");
+        //weeks= intent.getStringExtra("week");
         final String position= intent.getStringExtra("position");
         final Spinner teamSpinner = (Spinner) findViewById(R.id.teamSpinner);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(
@@ -155,7 +155,7 @@ public class AddPlayer extends Activity {
                         //Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
                         Intent myIntent = new Intent(AddPlayer.this, TeamScore.class);
 
-                        myIntent.putExtra("week", weeks); //Optional parameters
+                        //myIntent.putExtra("week", weeks); //Optional parameters
                         //myIntent.putExtra("teamName", teamName);
                         AddPlayer.this.startActivity(myIntent);
 

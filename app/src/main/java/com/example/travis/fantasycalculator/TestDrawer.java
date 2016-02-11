@@ -18,12 +18,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
 public class TestDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     protected DrawerLayout drawer;
+    private ArrayList<String> navDrawer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +36,11 @@ public class TestDrawer extends AppCompatActivity
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         String[] osArray = { "Team Score", "Create Team", "DeleteTeam" };
+        navDrawer= PlayerArray.getInstance().keysInArrayList();
+        navDrawer.add("Create Team");
+        navDrawer.add("Delete Team");
         ListView mDrawerList = (ListView)findViewById(R.id.navList);
-        ArrayAdapter mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
+        ArrayAdapter mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, navDrawer);
         mDrawerList.setAdapter(mAdapter);
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -107,22 +112,16 @@ public class TestDrawer extends AppCompatActivity
     }
 
     private void setActivity(int position){
-        if (position==0){
-            if(PlayerArray.getInstance().Teams.size()>0) {
-                Intent myIntent = new Intent(TestDrawer.this, TeamScore.class);
-                myIntent.putExtra("week", "1");
-                TestDrawer.this.startActivity(myIntent);
-            }
-            else{
-                String message= "No teams to display";
-                Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
-            }
+        if (position-PlayerArray.getInstance().numberOfTeams()<0){
+            PlayerArray.getInstance().currentTeam= navDrawer.get(position);
+            Intent myIntent = new Intent(TestDrawer.this, TeamScore.class);
+            TestDrawer.this.startActivity(myIntent);
         }
-        if (position==1){
+        if (position-PlayerArray.getInstance().numberOfTeams()==0){
             Intent myIntent = new Intent(TestDrawer.this, CreateTeam.class);
             TestDrawer.this.startActivity(myIntent);
         }
-        if (position==2){
+        if (position-PlayerArray.getInstance().numberOfTeams()==1){
             if(PlayerArray.getInstance().Teams.size()>0) {
                 Intent myIntent = new Intent(TestDrawer.this, DeleteTeam.class);
                 //myIntent.putExtra("week", "1");

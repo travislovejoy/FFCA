@@ -36,6 +36,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -48,7 +49,7 @@ public class TeamScore extends TestDrawer {
         private ProgressDialog dialog=null ;
         private String TAG="Tutorial Connect";
         private String tag_json_arry = "json_array_req";
-        private String url = "http://192.168.0.5";
+        private String url = "http://192.168.0.2";
         private String url_file="/getplayerstats.php?";
         private static final String TAG_NAME = "name";
         private static final String TAG_POS = "pos";
@@ -66,7 +67,7 @@ public class TeamScore extends TestDrawer {
 
             Intent intent = getIntent();
             //final String teamName= intent.getStringExtra("teamName");
-            final String week= intent.getStringExtra("week");
+            //final String week= intent.getStringExtra("week");
 
             Set<String> keys = PlayerArray.getInstance().getKeys();
             String[] keyArray = keys.toArray(new String[keys.size()]);
@@ -77,16 +78,25 @@ public class TeamScore extends TestDrawer {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(adapter);
 
-            if (!week.equals(null)) {
-                int spinnerPosition = adapter.getPosition(week);
+            if (!PlayerArray.getInstance().week.equals(null)) {
+                int spinnerPosition = adapter.getPosition(PlayerArray.getInstance().week);
                spinner.setSelection(spinnerPosition);
            }
 
-            final Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
+            final TextView tv= (TextView)findViewById(R.id.Team);
+            tv.setText(PlayerArray.getInstance().currentTeam);
+
+
+           /* final Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
             ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(
                     this, android.R.layout.simple_spinner_item,keyArray);
             adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner2.setAdapter(adapter2);
+
+            if (!PlayerArray.getInstance().currentTeam.equals(null)) {
+                int spinnerPosition = adapter2.getPosition(PlayerArray.getInstance().currentTeam);
+                spinner2.setSelection(spinnerPosition);
+            }*/
 
             b1=(Button)findViewById(R.id.submit);
             b1.setOnClickListener(new View.OnClickListener() {
@@ -133,9 +143,11 @@ public class TeamScore extends TestDrawer {
 
             HashMap<String, String> params = new HashMap<String, String>();
             final Spinner spinner = (Spinner) findViewById(R.id.spinner);
-            final Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
+            //final Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
             final String week = spinner.getSelectedItem().toString();
-            final String team= spinner2.getSelectedItem().toString();
+            PlayerArray.getInstance().week= week;
+            final String team= PlayerArray.getInstance().currentTeam;
+            //PlayerArray.getInstance().currentTeam=team;
             String new_url=url+url_file;
             for(int i=0; i<PlayerArray.getInstance().Size(team); i++){
                 new_url = new_url + "name[]=" + PlayerArray.getInstance().getID(i,team)+"&";
@@ -200,7 +212,7 @@ public class TeamScore extends TestDrawer {
                             myIntent.putExtra("pos", position); //Optional parameters
                             myIntent.putExtra("teamName", team);
                             myIntent.putExtra("position", getPos);
-                            myIntent.putExtra("week", week);
+                            //myIntent.putExtra("week", week);
                             TeamScore.this.startActivity(myIntent);
 
                         }

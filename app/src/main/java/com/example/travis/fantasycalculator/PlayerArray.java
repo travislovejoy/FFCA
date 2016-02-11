@@ -1,6 +1,7 @@
 package com.example.travis.fantasycalculator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -15,6 +16,8 @@ public final class PlayerArray {
 
         //public List<Player> PlayerList = new ArrayList<Player>();
         public HashMap<String, List<Player>> Teams= new HashMap<>();
+        public String week= "1";
+        public String currentTeam;
                     //PlayerList.add("00-0024334");
 
         public static PlayerArray getInstance() {
@@ -64,6 +67,7 @@ public final class PlayerArray {
         public void addTeam(String teamName){
             List<Player> PlayerList = new ArrayList<Player>();
             Teams.put(teamName, PlayerList);
+            currentTeam= teamName;
             //Teams.put("blah", PlayerList);
         }
 
@@ -80,6 +84,17 @@ public final class PlayerArray {
 
         public void deleteTeam(String key){
             Teams.remove(key);
+        }
+
+        public ArrayList<String> keysInArrayList(){
+            Set<String> keys = Teams.keySet();
+            String[] keyArray = keys.toArray(new String[keys.size()]);
+            ArrayList<String> list= new ArrayList<String>(Arrays.asList(keyArray));
+            return list;
+        }
+
+        public int numberOfTeams(){
+            return Teams.size();
         }
 
 }
