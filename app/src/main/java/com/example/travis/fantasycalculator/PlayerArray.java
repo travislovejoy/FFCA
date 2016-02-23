@@ -15,7 +15,7 @@ public final class PlayerArray {
         private static PlayerArray instance = new PlayerArray();
 
         //public List<Player> PlayerList = new ArrayList<Player>();
-        public HashMap<String, List<Player>> Teams= new HashMap<>();
+        public HashMap<String, Team> Teams= new HashMap<>();
         public String week= "1";
         public String currentTeam;
                     //PlayerList.add("00-0024334");
@@ -41,32 +41,44 @@ public final class PlayerArray {
 
         public int Size(String teamName){
             //return PlayerList.size();
-            return Teams.get(teamName).size();
+            return Teams.get(teamName).Starters.size();
         }
 
         public String getID(int pos, String teamName){
 
             //Player newplayer= PlayerList.get(pos);
-            return Teams.get(teamName).get(pos).id;
+            return Teams.get(teamName).Starters.get(pos).id;
         }
 
+    public String getBenchID(int pos, String teamName){
+
+        //Player newplayer= PlayerList.get(pos);
+        return Teams.get(teamName).Bench.get(pos).id;
+    }
+
         public void SwapId(int pos, String newId, String teamName){
-            Teams.get(teamName).get(pos).id=newId;
+            Teams.get(teamName).Starters.get(pos).id=newId;
             return;
         }
 
         public String getpos(int pos, String teamName){
-            return Teams.get(teamName).get(pos).position;
+            return Teams.get(teamName).Starters.get(pos).position;
         }
 
         public void addPlayer(String pos, String id, String teamName){
-            Teams.get(teamName).add(new Player(pos, id));
+            Teams.get(teamName).Starters.add(new Player(pos, id));
             return;
         }
 
+    public void addBench(String pos, String id, String teamName){
+        Teams.get(teamName).Bench.add(new Player(pos, id));
+        return;
+    }
+
         public void addTeam(String teamName){
-            List<Player> PlayerList = new ArrayList<Player>();
-            Teams.put(teamName, PlayerList);
+            //List<Player> PlayerList = new ArrayList<Player>();
+            Team newTeam= new Team();
+            Teams.put(teamName, newTeam);
             currentTeam= teamName;
             //Teams.put("blah", PlayerList);
         }
