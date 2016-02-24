@@ -48,6 +48,8 @@ public class TeamScore extends TestDrawer {
 
     private ProgressDialog dialog = null;
     private String TAG = "Tutorial Connect";
+    private String STARTER = "starter";
+    private String BENCH = "bench";
     private String tag_json_arry = "json_array_req";
     private String url = "http://192.168.0.11";
     private String url_file = "/getplayerstats.php?";
@@ -84,7 +86,7 @@ public class TeamScore extends TestDrawer {
         }
 
         final TextView tv = (TextView) findViewById(R.id.Team);
-        tv.setText(PlayerArray.getInstance().currentTeam);
+        tv.setText("Team Name: "+ PlayerArray.getInstance().currentTeam);
 
 
            /* final Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
@@ -98,13 +100,20 @@ public class TeamScore extends TestDrawer {
                 spinner2.setSelection(spinnerPosition);
             }*/
 
-        b1 = (Button) findViewById(R.id.submit);
-        b1.setOnClickListener(new View.OnClickListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 update_score();
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
         });
+
+
 
 
         update_score();
@@ -148,25 +157,27 @@ public class TeamScore extends TestDrawer {
         final String team = PlayerArray.getInstance().currentTeam;
         //PlayerArray.getInstance().currentTeam=team;
         String starter_url = url + url_file;
-        for (int i = 0; i < PlayerArray.getInstance().Size(team); i++) {
+        for (int i = 0; i < PlayerArray.getInstance().Size(team, STARTER); i++) {
             starter_url = starter_url + "name[]=" + PlayerArray.getInstance().getID(i, team) + "&";
         }
         starter_url += "week=" + week;
         ListView lv = (ListView) findViewById(R.id.starters);
-        get_Data(starter_url, team, lv);
+        get_Data(starter_url, team, lv, STARTER);
 
 
         String bench_url = url + url_file;
-        bench_url = bench_url + "name[]=" + PlayerArray.getInstance().getBenchID(0, team) + "&";
+        for (int i = 0; i < PlayerArray.getInstance().Size(team, BENCH); i++) {
+            bench_url = bench_url + "name[]=" + PlayerArray.getInstance().getBenchID(i, team) + "&";
+        }
         bench_url += "week=" + week;
         lv = (ListView) findViewById(R.id.bench);
-        get_Data(bench_url, team, lv);
+        get_Data(bench_url, team, lv, BENCH);
         dialog.dismiss();
 
     }
 
 
-    void get_Data(String new_url, final String team, final ListView lv) {
+    void get_Data(String new_url, final String team, final ListView lv, final String type) {
         JsonObjectRequest request = new JsonObjectRequest(new_url,
                 null, new Response.Listener<JSONObject>() {
 
@@ -178,15 +189,19 @@ public class TeamScore extends TestDrawer {
 
                 try {
                     JSONArray ja = response.getJSONArray("players");
-                    int total = 0;
+
+                        int total = 0;
+
                     for (int i = 0; i < ja.length(); i++) {
                         HashMap<String, String> contact = new HashMap<String, String>();
                         JSONObject jobj = ja.getJSONObject(i);
                         String name = jobj.getString("name");
                         //String pos=jobj.getString("pos");
-                        String pos = PlayerArray.getInstance().getpos(i, team);
+                        String pos = PlayerArray.getInstance().getpos(i, team, type);
                         int score = CalculateScore(jobj);
-                        total += score;
+                        if(type.equals(STARTER)){
+                            total += score;
+                            }
                         String description = "Not yet available";
                         String scores = Integer.toString(score);
                         contact.put(TAG_NAME, name);
@@ -197,7 +212,9 @@ public class TeamScore extends TestDrawer {
 
                     }
                     TextView text = (TextView) findViewById(R.id.total);
-                    text.setText("total   " + total);
+                    if(type.equals(STARTER)) {
+                        text.setText("total   " + total);
+                    }
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -224,6 +241,7 @@ public class TeamScore extends TestDrawer {
                         myIntent.putExtra("pos", position); //Optional parameters
                         myIntent.putExtra("teamName", team);
                         myIntent.putExtra("position", getPos);
+                        myIntent.putExtra("type", type);
                         //myIntent.putExtra("week", week);
                         TeamScore.this.startActivity(myIntent);
 

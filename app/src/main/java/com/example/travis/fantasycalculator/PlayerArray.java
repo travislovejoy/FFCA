@@ -39,9 +39,13 @@ public final class PlayerArray {
             //PlayerList.add(new Player("QB","0"));
         }
 
-        public int Size(String teamName){
+        public int Size(String teamName, String type){
             //return PlayerList.size();
-            return Teams.get(teamName).Starters.size();
+            if(type.equals("starter")){
+                return Teams.get(teamName).Starters.size();}
+            else{
+                return Teams.get(teamName).Bench.size();
+            }
         }
 
         public String getID(int pos, String teamName){
@@ -50,20 +54,28 @@ public final class PlayerArray {
             return Teams.get(teamName).Starters.get(pos).id;
         }
 
-    public String getBenchID(int pos, String teamName){
+        public String getBenchID(int pos, String teamName){
 
         //Player newplayer= PlayerList.get(pos);
         return Teams.get(teamName).Bench.get(pos).id;
-    }
+        }
 
-        public void SwapId(int pos, String newId, String teamName){
-            Teams.get(teamName).Starters.get(pos).id=newId;
+        public void SwapId(int pos, String newId, String teamName, String type){
+            if (type.equals("starter")){
+                Teams.get(teamName).Starters.get(pos).id=newId;}
+            else{
+                Teams.get(teamName).Bench.get(pos).id=newId;
+            }
             return;
         }
 
-        public String getpos(int pos, String teamName){
-            return Teams.get(teamName).Starters.get(pos).position;
-        }
+        public String getpos(int pos, String teamName, String type){
+            if (type.equals("starter")){
+                return Teams.get(teamName).Starters.get(pos).position;}
+            else{
+                return Teams.get(teamName).Bench.get(pos).position;}
+
+            }
 
         public void addPlayer(String pos, String id, String teamName){
             Teams.get(teamName).Starters.add(new Player(pos, id));

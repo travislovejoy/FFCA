@@ -90,27 +90,27 @@
         android:layout_height="wrap_content"
         android:text="Create Team"
         android:id="@+id/create"
-        android:layout_below="@+id/teamName"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="34dp" />
+        android:layout_marginBottom="42dp" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/teamName"
         android:hint="Enter team name"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/BenchSpinner"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/flexSpinner"
-        android:layout_alignTop="@+id/textView2"
-        android:layout_alignLeft="@+id/teSpinner"
-        android:layout_alignStart="@+id/teSpinner" />
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/flexSpinner"
+    android:layout_alignTop="@+id/textView2"
+    android:layout_alignLeft="@+id/teSpinner"
+    android:layout_alignStart="@+id/teSpinner" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -119,6 +119,24 @@
         android:text="Flex"
         android:id="@+id/textView2"
         android:layout_below="@+id/teSpinner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/BenchSpinner"
+        android:layout_alignTop="@+id/bench"
+        android:layout_alignLeft="@+id/flexSpinner"
+        android:layout_alignStart="@+id/flexSpinner" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Bench"
+        android:id="@+id/bench"
+        android:layout_below="@+id/flexSpinner"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 </RelativeLayout>

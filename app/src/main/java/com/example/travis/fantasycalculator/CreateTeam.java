@@ -20,7 +20,7 @@ public class CreateTeam extends TestDrawer {
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView= inflater.inflate(R.layout.activity_create_team, null, false);
-        drawer.addView(contentView,0);
+        drawer.addView(contentView, 0);
 
         final Spinner qbSpinner = (Spinner) findViewById(R.id.qbSpinner);
         ArrayAdapter qbAdapter = ArrayAdapter.createFromResource(
@@ -52,6 +52,12 @@ public class CreateTeam extends TestDrawer {
         flexAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         flexSpinner.setAdapter(flexAdapter);
 
+        final Spinner benchSpinner = (Spinner) findViewById(R.id.BenchSpinner);
+        ArrayAdapter benchAdapter = ArrayAdapter.createFromResource(
+                this, R.array.posNumbers, android.R.layout.simple_spinner_item);
+        flexAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        benchSpinner.setAdapter(benchAdapter);
+
         final EditText teamName = (EditText) findViewById(R.id.teamName);
         CreateTeam=(Button)findViewById(R.id.create);
         CreateTeam.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +76,7 @@ public class CreateTeam extends TestDrawer {
                     int wr = Integer.valueOf(wrSpinner.getSelectedItem().toString());
                     int flex = Integer.valueOf(flexSpinner.getSelectedItem().toString());
                     int te = Integer.valueOf(teSpinner.getSelectedItem().toString());
+                    int bench = Integer.valueOf(benchSpinner.getSelectedItem().toString());
                     //String name = "default";
                     //PlayerArray team= new PlayerArray(name);
                     PlayerArray.getInstance().addTeam(name);
@@ -88,7 +95,9 @@ public class CreateTeam extends TestDrawer {
                     for (int i = 0; i < flex; i++) {
                         PlayerArray.getInstance().addPlayer("Flex", "0", name);
                     }
-                    PlayerArray.getInstance().addBench("Bench", "0", name);
+                    for (int i = 0; i < bench; i++) {
+                        PlayerArray.getInstance().addBench("Bench", "0", name);
+                    }
                    Intent myIntent = new Intent(CreateTeam.this, TeamScore.class);
                     String week= "1";
                     myIntent.putExtra("week", week); //Optional parameters

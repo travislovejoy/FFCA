@@ -51,27 +51,40 @@ public class AddPlayer extends Activity {
         Intent intent = getIntent();
         final Integer value = intent.getIntExtra("pos", 0);
         final String teamName= intent.getStringExtra("teamName");
+        final String type= intent.getStringExtra("type");
         //weeks= intent.getStringExtra("week");
-        final String position= intent.getStringExtra("position");
+        final String pos= intent.getStringExtra("position");
         final Spinner teamSpinner = (Spinner) findViewById(R.id.teamSpinner);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(
                 this, R.array.TEAMS, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         teamSpinner.setAdapter(adapter);
 
+        teamSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                update_player_list(value, teamName, pos, type);
+            }
 
-        submit=(Button)findViewById(R.id.submit1);
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
+
+        /*submit=(Button)findViewById(R.id.submit1);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                update_player_list(value, teamName, position);
+                update_player_list(value, teamName, pos, type);
             }
-        });
+        });*/
 
-        update_player_list(value, teamName, position);
+        update_player_list(value, teamName, pos,type);
     }
 
-    private void update_player_list(final int value, final String teamName, String pos) {
+    private void update_player_list(final int value, final String teamName, String pos, final String type) {
         dialog = new ProgressDialog(this);
 
 
@@ -89,7 +102,7 @@ public class AddPlayer extends Activity {
             team="'*'";
         }
 
-        if(pos.equals("Flex")){
+        if(pos.equals("Flex")||pos.equals("Bench")){
             pos="'QB','WR','TE','RB'";
         }
         else{
@@ -150,7 +163,7 @@ public class AddPlayer extends Activity {
                         String item = Integer.toString(position);
                         HashMap<String, String> player = (HashMap) parent.getItemAtPosition(position);
                         item += " " + player.get(TAG_ID);
-                        PlayerArray.getInstance().SwapId(value, player.get(TAG_ID),teamName);
+                        PlayerArray.getInstance().SwapId(value, player.get(TAG_ID),teamName, type);
 
                         //Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
                         Intent myIntent = new Intent(AddPlayer.this, TeamScore.class);
