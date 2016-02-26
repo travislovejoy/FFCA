@@ -51,7 +51,7 @@ public class TeamScore extends TestDrawer {
     private String STARTER = "starter";
     private String BENCH = "bench";
     private String tag_json_arry = "json_array_req";
-    private String url = "http://192.168.0.11";
+    private String url = "http://192.168.0.9";
     private String url_file = "/getplayerstats.php?";
     private static final String TAG_NAME = "name";
     private static final String TAG_POS = "pos";
@@ -121,7 +121,7 @@ public class TeamScore extends TestDrawer {
 
     }
 
-    private int CalculateScore(JSONObject player) {
+    private int CalculateScore(JSONObject player, String team) {
         try {
             int pass_yards = player.getInt("pass_yards");
             int pass_tds = player.getInt("pass_tds");
@@ -130,9 +130,10 @@ public class TeamScore extends TestDrawer {
             int rec_yards = player.getInt("rec_yards");
             int rec_tds = player.getInt("rec_tds");
             int rec = player.getInt("rec");
-            int pass_score = pass_yards / 25 + pass_tds * 4;
-            int rush_score = rush_yards / 10 + rush_tds * 6;
-            int rec_score = rec_yards / 10 + rec_tds * 6 + rec * 1;
+            Team x= PlayerArray.getInstance().getTeam(team) ;
+            int pass_score = pass_yards / x.PY + pass_tds * x.PTd;
+            int rush_score = rush_yards / x.RY + rush_tds * x.RTD;
+            int rec_score = rec_yards / x.RecY + rec_tds * x.RecTD + rec * 1;
             int score = pass_score + rush_score + rec_score;
             return score;
         } catch (JSONException e) {
@@ -198,7 +199,7 @@ public class TeamScore extends TestDrawer {
                         String name = jobj.getString("name");
                         //String pos=jobj.getString("pos");
                         String pos = PlayerArray.getInstance().getpos(i, team, type);
-                        int score = CalculateScore(jobj);
+                        int score = CalculateScore(jobj, team);
                         if(type.equals(STARTER)){
                             total += score;
                             }

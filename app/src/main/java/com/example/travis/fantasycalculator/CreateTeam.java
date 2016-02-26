@@ -58,6 +58,13 @@ public class CreateTeam extends TestDrawer {
         flexAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         benchSpinner.setAdapter(benchAdapter);
 
+        final EditText PY=   (EditText) findViewById(R.id.passingYards);
+        final EditText PTd = (EditText) findViewById(R.id.passingTds);
+        final EditText PInt = (EditText) findViewById(R.id.interceptions);
+        final EditText RY = (EditText) findViewById(R.id.rushingYds);
+        final EditText  RTd= (EditText) findViewById(R.id.rushingTds);
+        final EditText  RecY= (EditText) findViewById(R.id.receivingYards);
+        final EditText  RecTd= (EditText) findViewById(R.id.receivingTds);
         final EditText teamName = (EditText) findViewById(R.id.teamName);
         CreateTeam=(Button)findViewById(R.id.create);
         CreateTeam.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +86,7 @@ public class CreateTeam extends TestDrawer {
                     int bench = Integer.valueOf(benchSpinner.getSelectedItem().toString());
                     //String name = "default";
                     //PlayerArray team= new PlayerArray(name);
-                    PlayerArray.getInstance().addTeam(name);
+                    PlayerArray.getInstance().addTeam(name, PY, PTd, PInt, RY,RTd,RecY, RecTd);
                     for (int i = 0; i < qb; i++) {
                         PlayerArray.getInstance().addPlayer("QB", "0", name);
                     }

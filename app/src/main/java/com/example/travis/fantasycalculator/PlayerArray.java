@@ -1,5 +1,7 @@
 package com.example.travis.fantasycalculator;
 
+import android.widget.EditText;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -87,9 +89,9 @@ public final class PlayerArray {
         return;
     }
 
-        public void addTeam(String teamName){
+        public void addTeam(String teamName, EditText PY, EditText PTd, EditText PInt, EditText RY, EditText RTd, EditText RecTD, EditText RecY){
             //List<Player> PlayerList = new ArrayList<Player>();
-            Team newTeam= new Team();
+            Team newTeam= new Team(PY, PTd, PInt, RY, RTd, RecY, RecTD);
             Teams.put(teamName, newTeam);
             currentTeam= teamName;
             //Teams.put("blah", PlayerList);
@@ -119,6 +121,10 @@ public final class PlayerArray {
 
         public int numberOfTeams(){
             return Teams.size();
+        }
+
+        public Team getTeam(String teamName){
+            return Teams.get(teamName);
         }
 
 }
