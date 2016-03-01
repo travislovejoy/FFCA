@@ -11,9 +11,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import java.util.HashMap;
 
 public class CreateTeam extends TestDrawer {
     Button CreateTeam;
+    boolean flag= true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,12 +63,19 @@ public class CreateTeam extends TestDrawer {
         benchSpinner.setAdapter(benchAdapter);
 
         final EditText PY=   (EditText) findViewById(R.id.passingYards);
+        PY.setText("25", TextView.BufferType.EDITABLE);
         final EditText PTd = (EditText) findViewById(R.id.passingTds);
+        PTd.setText("4", TextView.BufferType.EDITABLE);
         final EditText PInt = (EditText) findViewById(R.id.interceptions);
+        PInt.setText("2", TextView.BufferType.EDITABLE);
         final EditText RY = (EditText) findViewById(R.id.rushingYds);
+        RY.setText("10", TextView.BufferType.EDITABLE);
         final EditText  RTd= (EditText) findViewById(R.id.rushingTds);
+        RTd.setText("6", TextView.BufferType.EDITABLE);
         final EditText  RecY= (EditText) findViewById(R.id.receivingYards);
+        RecY.setText("10", TextView.BufferType.EDITABLE);
         final EditText  RecTd= (EditText) findViewById(R.id.receivingTds);
+        RecTd.setText("6", TextView.BufferType.EDITABLE);
         final EditText teamName = (EditText) findViewById(R.id.teamName);
         CreateTeam=(Button)findViewById(R.id.create);
         CreateTeam.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +97,21 @@ public class CreateTeam extends TestDrawer {
                     int bench = Integer.valueOf(benchSpinner.getSelectedItem().toString());
                     //String name = "default";
                     //PlayerArray team= new PlayerArray(name);
-                    PlayerArray.getInstance().addTeam(name, PY, PTd, PInt, RY,RTd,RecY, RecTd);
+
+                    int newPY= etConverter(PY);
+                    int newPTd= etConverter(PTd);
+                    int newPInt= etConverter(PInt);
+                    int newRY= etConverter(RY);
+                    int newRTd= etConverter(RTd);
+                    int newRecY= etConverter(RecY);
+                    int newRecTd= etConverter(RecTd);
+
+
+                    if (!flag){
+                        flag=true;
+                        return;
+                    }
+                    PlayerArray.getInstance().addTeam(name, newPY, newPTd, newPInt, newRY, newRTd, newRecY, newRecTd);
                     for (int i = 0; i < qb; i++) {
                         PlayerArray.getInstance().addPlayer("QB", "0", name);
                     }
@@ -117,7 +142,18 @@ public class CreateTeam extends TestDrawer {
     }
 
 
+    private int etConverter(EditText x){
+        String myEditValue = x.getText().toString();
+        if(TextUtils.isEmpty(myEditValue)) {
+            x.setError("Invalid entry");
+            flag=false;
+            return 0;
+        }
+        else {
+            return Integer.parseInt(myEditValue);
+        }
 
+    }
 
 
 }

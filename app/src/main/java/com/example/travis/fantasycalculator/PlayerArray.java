@@ -89,7 +89,7 @@ public final class PlayerArray {
         return;
     }
 
-        public void addTeam(String teamName, EditText PY, EditText PTd, EditText PInt, EditText RY, EditText RTd, EditText RecTD, EditText RecY){
+        public void addTeam(String teamName, int PY, int PTd, int PInt, int RY, int RTd, int RecTD, int RecY){
             //List<Player> PlayerList = new ArrayList<Player>();
             Team newTeam= new Team(PY, PTd, PInt, RY, RTd, RecY, RecTD);
             Teams.put(teamName, newTeam);

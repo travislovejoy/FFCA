@@ -14,22 +14,18 @@ public class Team {
     ArrayList<Player> Bench= new ArrayList<Player>();
     int PY, PTd, Pint, RY, RTD, RecY, RecTD;
 
-    public Team(EditText PY, EditText PTd, EditText PInt, EditText RY, EditText RTd, EditText RecTD, EditText RecY){
+    public Team(int PY, int PTd, int PInt, int RY, int RTd, int RecTD, int RecY){
 
 
-        this.PY = etConverter(PY);
-        this.PTd= etConverter(PTd);
-        this.Pint= etConverter(PInt);
-        this.RY= etConverter(RY);
-        this.RTD= etConverter(RTd);
-        this.RecY= etConverter(RecY);
-        this.RecTD= etConverter(RecTD);
+        this.PY = PY;
+        this.PTd= PTd;
+        this.Pint= PInt;
+        this.RY= RY;
+        this.RTD= RTd;
+        this.RecY= RecY;
+        this.RecTD= RecTD;
     }
 
-    private int etConverter(EditText x){
-        String myEditValue = x.getText().toString();
-        return Integer.parseInt(myEditValue);
 
-    }
 
 }
