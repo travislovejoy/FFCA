@@ -52,13 +52,16 @@ public class TeamScore extends TestDrawer {
     private String STARTER = "starter";
     private String BENCH = "bench";
     private String tag_json_arry = "json_array_req";
-    private String url = "http://192.168.0.9";
+    private String url = "http://192.168.0.8";
     private String url_file = "/getplayerstats.php?";
     private static final String TAG_NAME = "name";
     private static final String TAG_POS = "pos";
     private static final String TAG_DESCRIPTION = "description";
     private static final String TAG_SCORE = "score";
-    Button b1;
+
+    Button editTeam;
+    ArrayList<HashMap<String, String>> starterList, benchList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +90,7 @@ public class TeamScore extends TestDrawer {
         }
 
         final TextView tv = (TextView) findViewById(R.id.Team);
-        tv.setText("Team Name: "+ PlayerArray.getInstance().currentTeam);
+        tv.setText("Team Name: " + PlayerArray.getInstance().currentTeam);
 
 
            /* final Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
@@ -114,6 +117,19 @@ public class TeamScore extends TestDrawer {
 
         });
 
+
+        editTeam=(Button)findViewById(R.id.editLineup);
+        editTeam.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        editTeam.setText("Cancel");
+                        ListView lv = (ListView) findViewById(R.id.starters);
+                        ListViewAdapter adapter = new ListViewAdapter(TeamScore.this, starterList);
+                        lv.setAdapter(adapter);
+                        ListUtils.setDynamicHeight(lv);
+                                        }
+                });
 
 
 
@@ -162,33 +178,37 @@ public class TeamScore extends TestDrawer {
         for (int i = 0; i < PlayerArray.getInstance().Size(team, STARTER); i++) {
             starter_url = starter_url + "name[]=" + PlayerArray.getInstance().getID(i, team) + "&";
         }
+        for (int i = 0; i < PlayerArray.getInstance().Size(team, BENCH); i++) {
+            starter_url = starter_url + "name[]=" + PlayerArray.getInstance().getBenchID(i, team) + "&";
+        }
         starter_url += "week=" + week;
-        ListView lv = (ListView) findViewById(R.id.starters);
-        get_Data(starter_url, team, lv, STARTER);
+        //ListView lv = (ListView) findViewById(R.id.starters);
+        get_Data(starter_url, team, PlayerArray.getInstance().Size(team,STARTER));
         //ListUtils.setDynamicHeight(lv);
 
 
-        String bench_url = url + url_file;
-        for (int i = 0; i < PlayerArray.getInstance().Size(team, BENCH); i++) {
-            bench_url = bench_url + "name[]=" + PlayerArray.getInstance().getBenchID(i, team) + "&";
-        }
-        bench_url += "week=" + week;
-        lv = (ListView) findViewById(R.id.bench);
-        get_Data(bench_url, team, lv, BENCH);
+        //String bench_url = url + url_file;
+        //for (int i = 0; i < PlayerArray.getInstance().Size(team, BENCH); i++) {
+        //    bench_url = bench_url + "name[]=" + PlayerArray.getInstance().getBenchID(i, team) + "&";
+        //}
+        //bench_url += "week=" + week;
+        //lv = (ListView) findViewById(R.id.bench);
+        //get_Data(bench_url, team, lv, BENCH);
        // ListUtils.setDynamicHeight(lv);
         dialog.dismiss();
 
     }
 
 
-    void get_Data(String new_url, final String team, final ListView lv, final String type) {
+    void get_Data(String new_url, final String team, final int starterSize) {
         JsonObjectRequest request = new JsonObjectRequest(new_url,
                 null, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
-                ArrayList<HashMap<String, String>> list;
-                list = new ArrayList<HashMap<String, String>>();
+                //ArrayList<HashMap<String, String>> list;
+                starterList = new ArrayList<HashMap<String, String>>();
+                benchList= new ArrayList<HashMap<String, String>>();
                 Log.d(TAG, response.toString());
 
                 try {
@@ -201,38 +221,57 @@ public class TeamScore extends TestDrawer {
                         JSONObject jobj = ja.getJSONObject(i);
                         String name = jobj.getString("name");
                         //String pos=jobj.getString("pos");
-                        String pos = PlayerArray.getInstance().getpos(i, team, type);
-                        int score = CalculateScore(jobj, team);
-                        if(type.equals(STARTER)){
-                            total += score;
-                            }
+                        if(i<starterSize) {
+                            String pos = PlayerArray.getInstance().getpos(i, team, STARTER);
+                            contact.put(TAG_POS, pos);
+                        }
+                        else{
+                            String pos = PlayerArray.getInstance().getpos(i-starterSize, team, BENCH);
+                            contact.put(TAG_POS, pos);
+                        }
                         String description = "Not yet available";
+                        int score = CalculateScore(jobj, team);
                         String scores = Integer.toString(score);
                         contact.put(TAG_NAME, name);
-                        contact.put(TAG_POS, pos);
+
                         contact.put(TAG_DESCRIPTION, description);
                         contact.put(TAG_SCORE, scores);
-                        list.add(contact);
+
+                        if(i<starterSize){
+                            total += score;
+                            starterList.add(contact);
+                        }
+                        else {
+                            benchList.add(contact);
+
+                        }
 
                     }
                     TextView text = (TextView) findViewById(R.id.total);
-                    if(type.equals(STARTER)) {
-                        text.setText("total   " + total);
-                    }
+                    text.setText("total   " + total);
+
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 ListAdapter adapter = new SimpleAdapter(
-                        TeamScore.this, list,
+                       TeamScore.this, starterList,
                         R.layout.list_item, new String[]{TAG_NAME, TAG_POS, TAG_DESCRIPTION, TAG_SCORE}, new int[]{R.id.name,
                         R.id.pos, R.id.description, R.id.points});
-                //ListView lv = (ListView) findViewById(android.R.id.starters);
-                lv.setAdapter(adapter);
-                ListUtils.setDynamicHeight(lv);
+                ListView lv1 = (ListView) findViewById(R.id.starters);
+               lv1.setAdapter(adapter);
+                ListUtils.setDynamicHeight(lv1);
+
+                ListAdapter  adapter2= new SimpleAdapter(
+                        TeamScore.this, benchList,
+                        R.layout.list_item, new String[]{TAG_NAME, TAG_POS, TAG_DESCRIPTION, TAG_SCORE}, new int[]{R.id.name,
+                        R.id.pos, R.id.description, R.id.points});
+                ListView lv2 = (ListView) findViewById(R.id.bench);
+                lv2.setAdapter(adapter2);
+                ListUtils.setDynamicHeight(lv2);
 
 
-                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position,
                                             long id) {
@@ -246,7 +285,28 @@ public class TeamScore extends TestDrawer {
                         myIntent.putExtra("pos", position); //Optional parameters
                         myIntent.putExtra("teamName", team);
                         myIntent.putExtra("position", getPos);
-                        myIntent.putExtra("type", type);
+                        myIntent.putExtra("type", STARTER);
+                        //myIntent.putExtra("week", week);
+                        TeamScore.this.startActivity(myIntent);
+
+                    }
+                });
+
+                lv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position,
+                                            long id) {
+
+                        String item = Integer.toString(position);
+                        HashMap<String, String> player = (HashMap) parent.getItemAtPosition(position);
+                        String getPos = player.get(TAG_POS);
+
+                        //Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
+                        Intent myIntent = new Intent(TeamScore.this, AddPlayer.class);
+                        myIntent.putExtra("pos", position); //Optional parameters
+                        myIntent.putExtra("teamName", team);
+                        myIntent.putExtra("position", getPos);
+                        myIntent.putExtra("type", BENCH);
                         //myIntent.putExtra("week", week);
                         TeamScore.this.startActivity(myIntent);
 

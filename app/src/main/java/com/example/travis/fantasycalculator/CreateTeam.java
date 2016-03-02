@@ -128,7 +128,7 @@ public class CreateTeam extends TestDrawer {
                         PlayerArray.getInstance().addPlayer("Flex", "0", name);
                     }
                     for (int i = 0; i < bench; i++) {
-                        PlayerArray.getInstance().addBench("Bench", "0", name);
+                        PlayerArray.getInstance().addBench("Bench", "1", name);
                     }
                    Intent myIntent = new Intent(CreateTeam.this, TeamScore.class);
                     String week= "1";
