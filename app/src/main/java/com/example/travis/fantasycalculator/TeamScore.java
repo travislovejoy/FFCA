@@ -58,6 +58,9 @@ public class TeamScore extends TestDrawer {
     private static final String TAG_POS = "pos";
     private static final String TAG_DESCRIPTION = "description";
     private static final String TAG_SCORE = "score";
+    private static boolean mFlag= false;
+    private static int mPosition;
+
 
     Button editTeam;
     ArrayList<HashMap<String, String>> starterList, benchList;
@@ -72,9 +75,6 @@ public class TeamScore extends TestDrawer {
         drawer.addView(contentView, 0);
 
         Intent intent = getIntent();
-        //final String teamName= intent.getStringExtra("teamName");
-        //final String week= intent.getStringExtra("week");
-
         Set<String> keys = PlayerArray.getInstance().getKeys();
         String[] keyArray = keys.toArray(new String[keys.size()]);
 
@@ -125,9 +125,8 @@ public class TeamScore extends TestDrawer {
                     public void onClick(View v) {
                         editTeam.setText("Cancel");
                         ListView lv = (ListView) findViewById(R.id.starters);
-                        ListViewAdapter adapter = new ListViewAdapter(TeamScore.this, starterList);
-                        lv.setAdapter(adapter);
-                        ListUtils.setDynamicHeight(lv);
+                        ListView lv2 = (ListView) findViewById(R.id.bench);
+                        set_move_Layout(lv,lv2, TeamScore.this);
                                         }
                 });
 
@@ -258,9 +257,9 @@ public class TeamScore extends TestDrawer {
                        TeamScore.this, starterList,
                         R.layout.list_item, new String[]{TAG_NAME, TAG_POS, TAG_DESCRIPTION, TAG_SCORE}, new int[]{R.id.name,
                         R.id.pos, R.id.description, R.id.points});
-                ListView lv1 = (ListView) findViewById(R.id.starters);
-               lv1.setAdapter(adapter);
-                ListUtils.setDynamicHeight(lv1);
+                ListView lv = (ListView) findViewById(R.id.starters);
+               lv.setAdapter(adapter);
+                ListUtils.setDynamicHeight(lv);
 
                 ListAdapter  adapter2= new SimpleAdapter(
                         TeamScore.this, benchList,
@@ -271,7 +270,7 @@ public class TeamScore extends TestDrawer {
                 ListUtils.setDynamicHeight(lv2);
 
 
-                lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position,
                                             long id) {
@@ -327,6 +326,31 @@ public class TeamScore extends TestDrawer {
 
     }
 
+    public void set_move_Layout(ListView lv, ListView lv2, Activity activity ){
+        //ListView lv = (ListView) findViewById(R.id.starters);
+        ListViewAdapter adapter = new ListViewAdapter(activity, starterList);
+        lv.setAdapter(adapter);
+        ListUtils.setDynamicHeight(lv);
+
+        //ListView lv2 = (ListView) findViewById(R.id.bench);
+        ListViewAdapter adapter2 = new ListViewAdapter(activity, benchList);
+        lv2.setAdapter(adapter2);
+        ListUtils.setDynamicHeight(lv2);
+    }
+
+    public static void movePlayer(int position){
+        if (!mFlag) {
+            mFlag = true;
+            mPosition = position;
+        }
+        else{
+                mFlag=false;
+                PlayerArray.getInstance().swap(mPosition, position);
+            }
+
+
+
+    }
 
     public static class ListUtils {
         public static void setDynamicHeight(ListView mListView) {

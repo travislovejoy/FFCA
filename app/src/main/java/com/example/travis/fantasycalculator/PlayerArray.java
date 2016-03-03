@@ -119,6 +119,12 @@ public final class PlayerArray {
             return list;
         }
 
+        public void swap(int mposition, int position){
+            Player tmp =Teams.get(currentTeam).Starters.get(mposition);
+            Teams.get(currentTeam).Starters.set(mposition, Teams.get(currentTeam).Starters.get(position) );
+            Teams.get(currentTeam).Starters.set(position, tmp );
+        }
+
         public int numberOfTeams(){
             return Teams.size();
         }
@@ -126,5 +132,7 @@ public final class PlayerArray {
         public Team getTeam(String teamName){
             return Teams.get(teamName);
         }
+
+
 
 }
