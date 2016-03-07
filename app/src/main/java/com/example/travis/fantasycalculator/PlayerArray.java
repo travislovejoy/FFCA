@@ -62,12 +62,16 @@ public final class PlayerArray {
         return Teams.get(teamName).Bench.get(pos).id;
         }
 
-        public void SwapId(int pos, String newId, String teamName, String type){
+        public void SwapId(int pos, String newId, String teamName, String type, String newPos){
             if (type.equals("starter")){
-                Teams.get(teamName).Starters.get(pos).id=newId;}
+                Teams.get(teamName).Starters.get(pos).id=newId;
+                Teams.get(teamName).Starters.get(pos).position=newPos;
+            }
             else{
                 Teams.get(teamName).Bench.get(pos).id=newId;
+                Teams.get(teamName).Bench.get(pos).position=newPos;
             }
+
             return;
         }
 
@@ -79,13 +83,20 @@ public final class PlayerArray {
 
             }
 
+        public String getpos(int pos, String teamName){
+            return Teams.get(teamName).Roster.get(pos);
+
+    }
+
         public void addPlayer(String pos, String id, String teamName){
             Teams.get(teamName).Starters.add(new Player(pos, id));
+            Teams.get(teamName).Roster.add(pos);
             return;
         }
 
     public void addBench(String pos, String id, String teamName){
         Teams.get(teamName).Bench.add(new Player(pos, id));
+        Teams.get(teamName).Roster.add(pos);
         return;
     }
 
@@ -119,10 +130,30 @@ public final class PlayerArray {
             return list;
         }
 
-        public void swap(int mposition, int position){
-            Player tmp =Teams.get(currentTeam).Starters.get(mposition);
-            Teams.get(currentTeam).Starters.set(mposition, Teams.get(currentTeam).Starters.get(position) );
-            Teams.get(currentTeam).Starters.set(position, tmp );
+        public void swap(int mposition, int position, boolean mStarter, boolean Starter){
+            ArrayList<Player> tmp;
+            Player temp;
+            ArrayList<Player> second;
+
+            if(mStarter) {
+                tmp = Teams.get(currentTeam).Starters;
+                temp= Teams.get(currentTeam).Starters.get(mposition);
+            }
+            else{
+                tmp= Teams.get(currentTeam).Bench;
+                temp= Teams.get(currentTeam).Bench.get(mposition);
+            }
+            if(Starter) {
+                second = Teams.get(currentTeam).Starters;
+            }
+            else {
+                second = Teams.get(currentTeam).Bench;
+            }
+
+
+            tmp.set(mposition, second.get(position));
+            second.set(position, temp );
+
         }
 
         public int numberOfTeams(){

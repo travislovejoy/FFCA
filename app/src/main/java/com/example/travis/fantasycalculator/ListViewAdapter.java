@@ -24,16 +24,20 @@ public class ListViewAdapter extends BaseAdapter {
     Activity activity;
     private static final String TAG_NAME = "name";
     private static final String TAG_POS = "pos";
+    private static final String TAG_RPOS = "rpos";
     private static final String TAG_DESCRIPTION = "description";
     private static final String TAG_SCORE = "score";
     private String status;
+    private boolean starter;
 
 
     public ListViewAdapter(Activity activity,
-                           ArrayList<HashMap<String, String>> list) {
+                           ArrayList<HashMap<String, String>> list, String text, boolean starter) {
         super();
         this.activity = activity;
         this.list = list;
+        this.status= text;
+        this.starter=starter;
 
     }
 
@@ -76,7 +80,7 @@ public class ListViewAdapter extends BaseAdapter {
             holder = new ViewHolder();
 
             holder.move = (Button) convertView.findViewById(R.id.move);
-            holder.move.setText("Move");
+            holder.move.setText(status);
 
 
             holder.name = (TextView) convertView.findViewById(R.id.name);
@@ -86,8 +90,8 @@ public class ListViewAdapter extends BaseAdapter {
 
                 @Override
                 public void onClick(View v) {
-                    holder.move.setText("Here");
-                    TeamScore.movePlayer(position);
+                    //holder.move.setText("Here");
+                    TeamScore.movePlayer(position,starter);
 
 
 
@@ -105,7 +109,7 @@ public class ListViewAdapter extends BaseAdapter {
 
         HashMap<String, String> map = list.get(position);
        holder.name.setText(map.get(TAG_NAME));
-       holder.pos.setText(map.get(TAG_POS));
+       holder.pos.setText(map.get(TAG_RPOS));
        // holder.item_total.setText(map.get(TOTAL_COLUMN));
        // holder.et_quantity.setText(map.get(ITEM_QUANTITY_COLUMN));
 

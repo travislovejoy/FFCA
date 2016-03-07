@@ -12,6 +12,7 @@ public class Team {
 
     ArrayList<Player> Starters = new ArrayList<Player>();
     ArrayList<Player> Bench= new ArrayList<Player>();
+    ArrayList<String> Roster=new ArrayList<>();
     int PY, PTd, Pint, RY, RTD, RecY, RecTD;
 
     public Team(int PY, int PTd, int PInt, int RY, int RTd, int RecTD, int RecY){

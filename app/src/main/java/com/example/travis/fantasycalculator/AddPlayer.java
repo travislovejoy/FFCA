@@ -34,7 +34,7 @@ public class AddPlayer extends Activity {
     private ProgressDialog dialog = null;
     private String TAG="Connect";
     private String tag_json_array = "json_array_req";
-    private String URL = "http://192.168.0.8/getplayerinfo.php?id[]='*'";
+    private String URL = "http://192.168.0.11/getplayerinfo.php?id[]='*'";
     private static final String TAG_NAME = "name";
     private static final String TAG_ID = "id";
     private static final String TAG_POS = "pos";
@@ -160,16 +160,14 @@ public class AddPlayer extends Activity {
                     public void onItemClick(AdapterView<?> parent, View view, int position,
                                             long id) {
 
-                        String item = Integer.toString(position);
+                        //String item = Integer.toString(position);
                         HashMap<String, String> player = (HashMap) parent.getItemAtPosition(position);
-                        item += " " + player.get(TAG_ID);
-                        PlayerArray.getInstance().SwapId(value, player.get(TAG_ID),teamName, type);
+                        //item += " " + player.get(TAG_ID);
+                        PlayerArray.getInstance().SwapId(value, player.get(TAG_ID),teamName, type, player.get(TAG_POS));
 
                         //Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
                         Intent myIntent = new Intent(AddPlayer.this, TeamScore.class);
 
-                        //myIntent.putExtra("week", weeks); //Optional parameters
-                        //myIntent.putExtra("teamName", teamName);
                         AddPlayer.this.startActivity(myIntent);
 
                     }

@@ -52,14 +52,16 @@ public class TeamScore extends TestDrawer {
     private String STARTER = "starter";
     private String BENCH = "bench";
     private String tag_json_arry = "json_array_req";
-    private String url = "http://192.168.0.8";
+    private String url = "http://192.168.0.11";
     private String url_file = "/getplayerstats.php?";
     private static final String TAG_NAME = "name";
     private static final String TAG_POS = "pos";
+    private static final String TAG_RPOS = "rpos";
     private static final String TAG_DESCRIPTION = "description";
     private static final String TAG_SCORE = "score";
     private static boolean mFlag= false;
     private static int mPosition;
+    private static boolean mStarter;
 
 
     Button editTeam;
@@ -126,7 +128,7 @@ public class TeamScore extends TestDrawer {
                         editTeam.setText("Cancel");
                         ListView lv = (ListView) findViewById(R.id.starters);
                         ListView lv2 = (ListView) findViewById(R.id.bench);
-                        set_move_Layout(lv,lv2, TeamScore.this);
+                        set_move_Layout(lv,lv2, TeamScore.this,"Move");
                                         }
                 });
 
@@ -168,11 +170,11 @@ public class TeamScore extends TestDrawer {
 
         HashMap<String, String> params = new HashMap<String, String>();
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        //final Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
+
         final String week = spinner.getSelectedItem().toString();
         PlayerArray.getInstance().week = week;
         final String team = PlayerArray.getInstance().currentTeam;
-        //PlayerArray.getInstance().currentTeam=team;
+
         String starter_url = url + url_file;
         for (int i = 0; i < PlayerArray.getInstance().Size(team, STARTER); i++) {
             starter_url = starter_url + "name[]=" + PlayerArray.getInstance().getID(i, team) + "&";
@@ -181,19 +183,8 @@ public class TeamScore extends TestDrawer {
             starter_url = starter_url + "name[]=" + PlayerArray.getInstance().getBenchID(i, team) + "&";
         }
         starter_url += "week=" + week;
-        //ListView lv = (ListView) findViewById(R.id.starters);
         get_Data(starter_url, team, PlayerArray.getInstance().Size(team,STARTER));
-        //ListUtils.setDynamicHeight(lv);
 
-
-        //String bench_url = url + url_file;
-        //for (int i = 0; i < PlayerArray.getInstance().Size(team, BENCH); i++) {
-        //    bench_url = bench_url + "name[]=" + PlayerArray.getInstance().getBenchID(i, team) + "&";
-        //}
-        //bench_url += "week=" + week;
-        //lv = (ListView) findViewById(R.id.bench);
-        //get_Data(bench_url, team, lv, BENCH);
-       // ListUtils.setDynamicHeight(lv);
         dialog.dismiss();
 
     }
@@ -220,6 +211,7 @@ public class TeamScore extends TestDrawer {
                         JSONObject jobj = ja.getJSONObject(i);
                         String name = jobj.getString("name");
                         //String pos=jobj.getString("pos");
+                        contact.put(TAG_RPOS,PlayerArray.getInstance().getpos(i,team));
                         if(i<starterSize) {
                             String pos = PlayerArray.getInstance().getpos(i, team, STARTER);
                             contact.put(TAG_POS, pos);
@@ -255,7 +247,7 @@ public class TeamScore extends TestDrawer {
                 }
                 ListAdapter adapter = new SimpleAdapter(
                        TeamScore.this, starterList,
-                        R.layout.list_item, new String[]{TAG_NAME, TAG_POS, TAG_DESCRIPTION, TAG_SCORE}, new int[]{R.id.name,
+                        R.layout.list_item, new String[]{TAG_NAME, TAG_RPOS, TAG_DESCRIPTION, TAG_SCORE}, new int[]{R.id.name,
                         R.id.pos, R.id.description, R.id.points});
                 ListView lv = (ListView) findViewById(R.id.starters);
                lv.setAdapter(adapter);
@@ -263,7 +255,7 @@ public class TeamScore extends TestDrawer {
 
                 ListAdapter  adapter2= new SimpleAdapter(
                         TeamScore.this, benchList,
-                        R.layout.list_item, new String[]{TAG_NAME, TAG_POS, TAG_DESCRIPTION, TAG_SCORE}, new int[]{R.id.name,
+                        R.layout.list_item, new String[]{TAG_NAME, TAG_RPOS, TAG_DESCRIPTION, TAG_SCORE}, new int[]{R.id.name,
                         R.id.pos, R.id.description, R.id.points});
                 ListView lv2 = (ListView) findViewById(R.id.bench);
                 lv2.setAdapter(adapter2);
@@ -277,7 +269,7 @@ public class TeamScore extends TestDrawer {
 
                         String item = Integer.toString(position);
                         HashMap<String, String> player = (HashMap) parent.getItemAtPosition(position);
-                        String getPos = player.get(TAG_POS);
+                        String getPos = player.get(TAG_RPOS);
 
                         //Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
                         Intent myIntent = new Intent(TeamScore.this, AddPlayer.class);
@@ -298,7 +290,7 @@ public class TeamScore extends TestDrawer {
 
                         String item = Integer.toString(position);
                         HashMap<String, String> player = (HashMap) parent.getItemAtPosition(position);
-                        String getPos = player.get(TAG_POS);
+                        String getPos = player.get(TAG_RPOS);
 
                         //Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
                         Intent myIntent = new Intent(TeamScore.this, AddPlayer.class);
@@ -326,26 +318,27 @@ public class TeamScore extends TestDrawer {
 
     }
 
-    public void set_move_Layout(ListView lv, ListView lv2, Activity activity ){
+    public void set_move_Layout(ListView lv, ListView lv2, Activity activity, String status ){
         //ListView lv = (ListView) findViewById(R.id.starters);
-        ListViewAdapter adapter = new ListViewAdapter(activity, starterList);
+        ListViewAdapter adapter = new ListViewAdapter(activity, starterList, status, true);
         lv.setAdapter(adapter);
         ListUtils.setDynamicHeight(lv);
 
         //ListView lv2 = (ListView) findViewById(R.id.bench);
-        ListViewAdapter adapter2 = new ListViewAdapter(activity, benchList);
+        ListViewAdapter adapter2 = new ListViewAdapter(activity, benchList, status, false);
         lv2.setAdapter(adapter2);
         ListUtils.setDynamicHeight(lv2);
     }
 
-    public static void movePlayer(int position){
+    public static void movePlayer(int position,boolean Starter){
         if (!mFlag) {
             mFlag = true;
             mPosition = position;
+            mStarter=Starter;
         }
         else{
                 mFlag=false;
-                PlayerArray.getInstance().swap(mPosition, position);
+                PlayerArray.getInstance().swap(mPosition, position, mStarter, Starter);
             }
 
 
