@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,37 +21,51 @@ import java.util.HashMap;
 
 
 public class ListViewAdapter extends BaseAdapter {
-    public ArrayList<HashMap<String, String>> list;
+    //public ArrayList<HashMap<String, String>> list;
+    Team team;
     Activity activity;
     private static final String TAG_NAME = "name";
     private static final String TAG_POS = "pos";
     private static final String TAG_RPOS = "rpos";
     private static final String TAG_DESCRIPTION = "description";
     private static final String TAG_SCORE = "score";
+    ListView lv, lv2;
     private String status;
     private boolean starter;
 
 
     public ListViewAdapter(Activity activity,
-                           ArrayList<HashMap<String, String>> list, String text, boolean starter) {
+                           Team team, String text, boolean starter, ListView lv, ListView lv2) {
         super();
         this.activity = activity;
-        this.list = list;
+        this.team = team;
         this.status= text;
         this.starter=starter;
+        this.lv=lv;
+        this.lv2=lv2;
 
     }
 
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        return list.size();
+        if(starter) {
+            return team.Starters.size();
+        }
+        else{
+            return team.Bench.size();
+        }
     }
 
     @Override
     public Object getItem(int position) {
         // TODO Auto-generated method stub
-        return list.get(position);
+        if(starter) {
+            return team.Starters.get(position);
+        }
+        else{
+            return team.Bench.get(position);
+        }
     }
 
     @Override
@@ -67,7 +82,7 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, final ViewGroup parent) {
+    public View getView(final int pos, View convertView, final ViewGroup parent) {
         // TODO Auto-generated method stub
 
         // TODO Auto-generated method stub
@@ -91,7 +106,7 @@ public class ListViewAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     //holder.move.setText("Here");
-                    TeamScore.movePlayer(position,starter);
+                    TeamScore.movePlayer(pos,starter, activity, lv, lv2);
 
 
 
@@ -107,9 +122,17 @@ public class ListViewAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        HashMap<String, String> map = list.get(position);
-       holder.name.setText(map.get(TAG_NAME));
-       holder.pos.setText(map.get(TAG_RPOS));
+       // HashMap<String, String> map = list.get(position);
+       //holder.name.setText(map.get(TAG_NAME));
+       //holder.pos.setText(map.get(TAG_RPOS));
+        if(starter) {
+            holder.name.setText(team.Starters.get(pos).id);
+            holder.pos.setText(team.Starters.get(pos).position);
+        }
+        else{
+            holder.name.setText(team.Bench.get(pos).id);
+            holder.pos.setText(team.Bench.get(pos).position);
+        }
        // holder.item_total.setText(map.get(TOTAL_COLUMN));
        // holder.et_quantity.setText(map.get(ITEM_QUANTITY_COLUMN));
 

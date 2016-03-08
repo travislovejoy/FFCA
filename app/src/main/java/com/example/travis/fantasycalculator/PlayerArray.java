@@ -41,9 +41,9 @@ public final class PlayerArray {
             //PlayerList.add(new Player("QB","0"));
         }
 
-        public int Size(String teamName, String type){
+        public int Size(String teamName, boolean Starter){
             //return PlayerList.size();
-            if(type.equals("starter")){
+            if(Starter){
                 return Teams.get(teamName).Starters.size();}
             else{
                 return Teams.get(teamName).Bench.size();
@@ -75,13 +75,21 @@ public final class PlayerArray {
             return;
         }
 
-        public String getpos(int pos, String teamName, String type){
-            if (type.equals("starter")){
+        public String getpos(int pos, String teamName, boolean Starter){
+            if (Starter){
                 return Teams.get(teamName).Starters.get(pos).position;}
             else{
                 return Teams.get(teamName).Bench.get(pos).position;}
 
             }
+
+        public String getRpos(int pos, String teamName, boolean Starter){
+            if (Starter){
+                return Teams.get(teamName).Roster.get(pos);}
+            else{
+                return Teams.get(teamName).Roster.get(pos+ PlayerArray.getInstance().Size(teamName,true));}
+
+        }
 
         public String getpos(int pos, String teamName){
             return Teams.get(teamName).Roster.get(pos);
@@ -135,24 +143,26 @@ public final class PlayerArray {
             Player temp;
             ArrayList<Player> second;
 
-            if(mStarter) {
-                tmp = Teams.get(currentTeam).Starters;
-                temp= Teams.get(currentTeam).Starters.get(mposition);
-            }
-            else{
-                tmp= Teams.get(currentTeam).Bench;
-                temp= Teams.get(currentTeam).Bench.get(mposition);
-            }
-            if(Starter) {
-                second = Teams.get(currentTeam).Starters;
-            }
-            else {
-                second = Teams.get(currentTeam).Bench;
-            }
 
 
-            tmp.set(mposition, second.get(position));
-            second.set(position, temp );
+                if (mStarter) {
+                    tmp = Teams.get(currentTeam).Starters;
+                    temp = Teams.get(currentTeam).Starters.get(mposition);
+                } else {
+                    tmp = Teams.get(currentTeam).Bench;
+                    temp = Teams.get(currentTeam).Bench.get(mposition);
+                }
+                if (Starter) {
+                    second = Teams.get(currentTeam).Starters;
+                } else {
+                    second = Teams.get(currentTeam).Bench;
+                }
+
+
+                tmp.set(mposition, second.get(position));
+                second.set(position, temp);
+
+
 
         }
 
@@ -162,6 +172,16 @@ public final class PlayerArray {
 
         public Team getTeam(String teamName){
             return Teams.get(teamName);
+        }
+
+        public boolean checkPos(String pos1, String pos2, String R1, String R2, String team){
+            if(!(R1.equals(pos2)||R1.equals("Bench")|| R1.equals("Flex"))){
+                return false;
+            }
+            if(!(R2.equals(pos1)||R2.equals("Bench")|| R2.equals("Flex"))){
+                return false;
+            }
+            return true;
         }
 
 
