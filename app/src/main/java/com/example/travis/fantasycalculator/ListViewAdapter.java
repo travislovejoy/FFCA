@@ -126,12 +126,12 @@ public class ListViewAdapter extends BaseAdapter {
        //holder.name.setText(map.get(TAG_NAME));
        //holder.pos.setText(map.get(TAG_RPOS));
         if(starter) {
-            holder.name.setText(team.Starters.get(pos).id);
-            holder.pos.setText(team.Starters.get(pos).position);
+            holder.name.setText(team.Starters.get(pos).name);
+            holder.pos.setText(team.Roster.get(pos));
         }
         else{
-            holder.name.setText(team.Bench.get(pos).id);
-            holder.pos.setText(team.Bench.get(pos).position);
+            holder.name.setText(team.Bench.get(pos).name);
+            holder.pos.setText("Bench");
         }
        // holder.item_total.setText(map.get(TOTAL_COLUMN));
        // holder.et_quantity.setText(map.get(ITEM_QUANTITY_COLUMN));

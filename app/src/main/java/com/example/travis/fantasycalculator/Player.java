@@ -7,10 +7,14 @@ public class Player {
 
     String position;
     String id;
+    String name;
+    String team;
 
-    public Player(String Pposition, String Pid){
-    position= Pposition;
-    id=Pid;
+    public Player(String position, String id, String name, String team){
+    this.position= position;
+    this.id=id;
+    this.name=name;
+    this.team= team;
 
     }
 }

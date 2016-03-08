@@ -163,7 +163,7 @@ public class AddPlayer extends Activity {
                         //String item = Integer.toString(position);
                         HashMap<String, String> player = (HashMap) parent.getItemAtPosition(position);
                         //item += " " + player.get(TAG_ID);
-                        PlayerArray.getInstance().SwapId(value, player.get(TAG_ID),teamName, type, player.get(TAG_POS));
+                        PlayerArray.getInstance().SwapId(value, player.get(TAG_ID),player.get(TAG_NAME),player.get(TAG_TEAM),teamName, type, player.get(TAG_POS));
 
                         //Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
                         Intent myIntent = new Intent(AddPlayer.this, TeamScore.class);
