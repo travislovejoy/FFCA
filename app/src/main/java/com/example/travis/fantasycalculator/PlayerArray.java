@@ -102,13 +102,13 @@ public final class PlayerArray {
 
         public void addPlayer(String pos, String id, String name, String team, String teamName){
 
-            Teams.get(teamName).Starters.add(new Player(pos, id, name, team));
+            Teams.get(teamName).Starters.add(new Player("", id, name, team));
             Teams.get(teamName).Roster.add(pos);
             return;
         }
 
     public void addBench(String pos, String id, String name, String team,String teamName){
-        Teams.get(teamName).Bench.add(new Player(pos, id, name, team));
+        Teams.get(teamName).Bench.add(new Player("", id, name, team));
         Teams.get(teamName).Roster.add(pos);
         return;
     }
@@ -180,10 +180,17 @@ public final class PlayerArray {
         }
 
         public boolean checkPos(String pos1, String pos2, String R1, String R2, String team){
-            if(!(R1.equals(pos2)||R1.equals("Bench")|| R1.equals("Flex"))){
+            /*
+            pos1= The position of the first player selected
+            pos2= The position of the second player selected
+            R1= The position designated for the first slot
+            R2= The position designated for the second slot
+            */
+
+            if(!(R1.equals(pos2)||R1.equals("Bench")|| R1.equals("Flex")||pos2.equals(""))){
                 return false;
             }
-            if(!(R2.equals(pos1)||R2.equals("Bench")|| R2.equals("Flex"))){
+            if(!(R2.equals(pos1)||R2.equals("Bench")|| R2.equals("Flex")||pos1.equals(""))){
                 return false;
             }
             return true;

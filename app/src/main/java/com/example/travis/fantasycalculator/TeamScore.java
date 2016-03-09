@@ -52,19 +52,21 @@ public class TeamScore extends TestDrawer {
     private String STARTER = "starter";
     private String BENCH = "bench";
     private String tag_json_arry = "json_array_req";
-    private String url = "http://192.168.0.2";
+    private String url = "http://192.168.0.6";
     private String url_file = "/getplayerstats.php?";
     private static final String TAG_NAME = "name";
     private static final String TAG_POS = "pos";
     private static final String TAG_RPOS = "rpos";
     private static final String TAG_DESCRIPTION = "description";
     private static final String TAG_SCORE = "score";
-    private static boolean mFlag= false;
-    private static int mPosition;
-    private static boolean mStarter;
+    private static boolean mFlag= false; //flag set when first player selected to be moved
+    private static int mPosition;//position of first player selected to be moved
+    private static boolean mStarter;// roster status of first player selected Starter/Bench
+    public static boolean editTeamFlag= false;// flag set to true when edit lineup button selected
 
 
     Button editTeam;
+
     ArrayList<HashMap<String, String>> starterList, benchList;
 
 
@@ -76,10 +78,7 @@ public class TeamScore extends TestDrawer {
         View contentView = inflater.inflate(R.layout.activity_main, null, false);
         drawer.addView(contentView, 0);
 
-        Intent intent = getIntent();
-        Set<String> keys = PlayerArray.getInstance().getKeys();
-        String[] keyArray = keys.toArray(new String[keys.size()]);
-
+        //Spinner adapter for weeks
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(
                 this, R.array.weeks, android.R.layout.simple_spinner_item);
@@ -91,20 +90,10 @@ public class TeamScore extends TestDrawer {
             spinner.setSelection(spinnerPosition);
         }
 
+        //Current team text view
         final TextView tv = (TextView) findViewById(R.id.Team);
         tv.setText("Team Name: " + PlayerArray.getInstance().currentTeam);
 
-
-           /* final Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
-            ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(
-                    this, android.R.layout.simple_spinner_item,keyArray);
-            adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner2.setAdapter(adapter2);
-
-            if (!PlayerArray.getInstance().currentTeam.equals(null)) {
-                int spinnerPosition = adapter2.getPosition(PlayerArray.getInstance().currentTeam);
-                spinner2.setSelection(spinnerPosition);
-            }*/
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -120,17 +109,28 @@ public class TeamScore extends TestDrawer {
         });
 
 
+
         editTeam=(Button)findViewById(R.id.editLineup);
         editTeam.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        editTeam.setText("Cancel");
-                        ListView lv = (ListView) findViewById(R.id.starters);
-                        ListView lv2 = (ListView) findViewById(R.id.bench);
-                        String currentTeam=PlayerArray.getInstance().currentTeam;
-                        set_move_Layout(lv,lv2,PlayerArray.getInstance().Teams.get(currentTeam),"Move");
-                                        }
+                        if(!editTeamFlag) {
+                            editTeam.setText("Submit");
+                            editTeamFlag = true;
+                            ListView lv = (ListView) findViewById(R.id.starters);
+                            ListView lv2 = (ListView) findViewById(R.id.bench);
+                            String currentTeam = PlayerArray.getInstance().currentTeam;
+                            set_move_Layout(lv, lv2, PlayerArray.getInstance().Teams.get(currentTeam), "Move");
+                        }
+                        else{
+                            //Return to team score layout
+                            update_score();
+                            editTeam.setText("Edit Lineup");
+                            editTeamFlag=false;
+                            mFlag=false;
+                        }
+                    }
                 });
 
 
@@ -321,25 +321,26 @@ public class TeamScore extends TestDrawer {
 
     public  void set_move_Layout(ListView lv, ListView lv2, Team team, String status ){
         //ListView lv = (ListView) findViewById(R.id.starters);
-        ListViewAdapter adapter = new ListViewAdapter(TeamScore.this, team, status, true, lv, lv2);
+        ListViewAdapter adapter = new ListViewAdapter(TeamScore.this, team, !mFlag, true, lv, lv2);
         lv.setAdapter(adapter);
         ListUtils.setDynamicHeight(lv);
 
         //ListView lv2 = (ListView) findViewById(R.id.bench);
-        ListViewAdapter adapter2 = new ListViewAdapter(TeamScore.this, team, status, false, lv, lv2);
+        ListViewAdapter adapter2 = new ListViewAdapter(TeamScore.this, team, !mFlag, false, lv, lv2);
         lv2.setAdapter(adapter2);
         ListUtils.setDynamicHeight(lv2);
     }
 
     public static void movePlayer(int position,boolean Starter, Activity activity, ListView lv, ListView lv2){
+        ListViewAdapter adapter, adapter2;
         if (!mFlag) {
             mFlag = true;
             mPosition = position;
             mStarter=Starter;
             //set_move_layout(lv, lv2, "Here");
             String currentTeam=PlayerArray.getInstance().currentTeam;
-            ListViewAdapter adapter= new ListViewAdapter(activity, PlayerArray.getInstance().Teams.get(currentTeam), "Here", true, lv, lv2);
-            ListViewAdapter adapter2= new ListViewAdapter(activity, PlayerArray.getInstance().Teams.get(currentTeam), "Here", false, lv, lv2);
+            adapter= new ListViewAdapter(activity, PlayerArray.getInstance().Teams.get(currentTeam), !mFlag, true, lv, lv2);
+            adapter2= new ListViewAdapter(activity, PlayerArray.getInstance().Teams.get(currentTeam), !mFlag, false, lv, lv2);
             lv.setAdapter(adapter);
             ListUtils.setDynamicHeight(lv);
             lv2.setAdapter(adapter2);
@@ -349,15 +350,26 @@ public class TeamScore extends TestDrawer {
                 mFlag=false;
                 String P1= PlayerArray.getInstance().getpos(mPosition,PlayerArray.getInstance().currentTeam, mStarter);
                 String P2= PlayerArray.getInstance().getpos(position, PlayerArray.getInstance().currentTeam, Starter);
-                String R1= PlayerArray.getInstance().getRpos(position, PlayerArray.getInstance().currentTeam, mStarter);
+                String R1= PlayerArray.getInstance().getRpos(mPosition, PlayerArray.getInstance().currentTeam, mStarter);
                 String R2= PlayerArray.getInstance().getRpos(position, PlayerArray.getInstance().currentTeam, Starter);
                 boolean check= PlayerArray.getInstance().checkPos(P1, P2, R1, R2, PlayerArray.getInstance().currentTeam );
                 if(check) {
                     PlayerArray.getInstance().swap(mPosition, position, mStarter, Starter);
+                    //lv.invalidateViews();
+                    //lv2.invalidateViews();
                 }
                 else{
-
+                    Toast.makeText(activity, "Invalid Move",
+                            Toast.LENGTH_LONG).show();
                 }
+            //mFlag=false;
+            String currentTeam=PlayerArray.getInstance().currentTeam;
+            adapter= new ListViewAdapter(activity, PlayerArray.getInstance().Teams.get(currentTeam), !mFlag, true, lv, lv2);
+            adapter2= new ListViewAdapter(activity, PlayerArray.getInstance().Teams.get(currentTeam), !mFlag, false, lv, lv2);
+            lv.setAdapter(adapter);
+            ListUtils.setDynamicHeight(lv);
+            lv2.setAdapter(adapter2);
+            ListUtils.setDynamicHeight(lv2);
             }
 
 

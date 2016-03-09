@@ -30,16 +30,16 @@ public class ListViewAdapter extends BaseAdapter {
     private static final String TAG_DESCRIPTION = "description";
     private static final String TAG_SCORE = "score";
     ListView lv, lv2;
-    private String status;
+    private boolean flag;
     private boolean starter;
 
 
     public ListViewAdapter(Activity activity,
-                           Team team, String text, boolean starter, ListView lv, ListView lv2) {
+                           Team team, boolean flag, boolean starter, ListView lv, ListView lv2) {
         super();
         this.activity = activity;
         this.team = team;
-        this.status= text;
+        this.flag= flag;
         this.starter=starter;
         this.lv=lv;
         this.lv2=lv2;
@@ -95,7 +95,12 @@ public class ListViewAdapter extends BaseAdapter {
             holder = new ViewHolder();
 
             holder.move = (Button) convertView.findViewById(R.id.move);
-            holder.move.setText(status);
+            if(!flag) {
+                holder.move.setText("Here");
+            }
+            else{
+                holder.move.setText("Move");
+            }
 
 
             holder.name = (TextView) convertView.findViewById(R.id.name);
@@ -106,7 +111,9 @@ public class ListViewAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     //holder.move.setText("Here");
-                    TeamScore.movePlayer(pos,starter, activity, lv, lv2);
+                    //holder.move.setText("");
+                    TeamScore.movePlayer(pos, starter, activity, lv, lv2);
+
 
 
 
