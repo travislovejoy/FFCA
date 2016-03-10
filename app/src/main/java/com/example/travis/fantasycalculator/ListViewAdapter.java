@@ -1,6 +1,7 @@
 package com.example.travis.fantasycalculator;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,8 +76,8 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     class ViewHolder {
-        Button move;
-        TextView name, pos;
+        Button move, add;
+        TextView name, pos, position;
 
 
     }
@@ -94,6 +95,7 @@ public class ListViewAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.move_player, null);
             holder = new ViewHolder();
 
+            holder.add= (Button) convertView.findViewById(R.id.addPlayer);
             holder.move = (Button) convertView.findViewById(R.id.move);
             if(!flag) {
                 holder.move.setText("Here");
@@ -105,20 +107,36 @@ public class ListViewAdapter extends BaseAdapter {
 
             holder.name = (TextView) convertView.findViewById(R.id.name);
             holder.pos= (TextView) convertView.findViewById(R.id.pos);
+            holder.position=(TextView) convertView.findViewById(R.id.position);
+
+
+            holder.add.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    Intent myIntent = new Intent(activity, AddPlayer.class);
+                    myIntent.putExtra("pos", pos); //Optional parameters
+                    myIntent.putExtra("teamName", PlayerArray.getInstance().currentTeam);
+                    myIntent.putExtra("position", team.Roster.get(pos));
+                   if(starter) {
+                       myIntent.putExtra("type", "starter" );
+                   }
+                    else{
+                       myIntent.putExtra("type", "Bench");
+                   }
+                    TeamScore.editTeamFlag=false;
+                    //ListViewAdapter.this.startActivity(myIntent);
+                    activity.startActivity(myIntent);
+                }
+            });
 
             holder.move.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    //holder.move.setText("Here");
-                    //holder.move.setText("");
+
                     TeamScore.movePlayer(pos, starter, activity, lv, lv2);
-
-
-
-
-
-
                 }
             });
 
@@ -129,19 +147,18 @@ public class ListViewAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-       // HashMap<String, String> map = list.get(position);
-       //holder.name.setText(map.get(TAG_NAME));
-       //holder.pos.setText(map.get(TAG_RPOS));
+
         if(starter) {
             holder.name.setText(team.Starters.get(pos).name);
             holder.pos.setText(team.Roster.get(pos));
+            holder.position.setText(", "+team.Starters.get(pos).position+" "+team.Starters.get(pos).team);
         }
         else{
             holder.name.setText(team.Bench.get(pos).name);
             holder.pos.setText("Bench");
+            holder.position.setText(", "+team.Bench.get(pos).position+" "+team.Bench.get(pos).team);
         }
-       // holder.item_total.setText(map.get(TOTAL_COLUMN));
-       // holder.et_quantity.setText(map.get(ITEM_QUANTITY_COLUMN));
+
 
         return convertView;
     }

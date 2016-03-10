@@ -68,6 +68,8 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
                 PlayerArray.getInstance().deleteTeam(list.get(position));
                 list.remove(position); //or some other task
                 notifyDataSetChanged();
+
+
             }
         });
 

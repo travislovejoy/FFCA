@@ -16,13 +16,15 @@ import java.util.Set;
 
 public class DeleteTeam extends TestDrawer {
 
+    static View contentView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView= inflater.inflate(R.layout.delete_team, null, false);
+         contentView= inflater.inflate(R.layout.delete_team, null, false);
         drawer.addView(contentView, 0);
 
         Set<String> keys = PlayerArray.getInstance().getKeys();
@@ -34,5 +36,10 @@ public class DeleteTeam extends TestDrawer {
 
         ListView lView = (ListView)findViewById(android.R.id.list);
         lView.setAdapter(adapter);
+
+
+
     }
+
+
 }
