@@ -45,6 +45,7 @@ public class ListViewAdapter extends BaseAdapter {
         this.lv=lv;
         this.lv2=lv2;
 
+
     }
 
     @Override
@@ -154,6 +155,7 @@ public class ListViewAdapter extends BaseAdapter {
             holder.position.setText(", "+team.Starters.get(pos).position+" "+team.Starters.get(pos).team);
         }
         else{
+
             holder.name.setText(team.Bench.get(pos).name);
             holder.pos.setText("Bench");
             holder.position.setText(", "+team.Bench.get(pos).position+" "+team.Bench.get(pos).team);

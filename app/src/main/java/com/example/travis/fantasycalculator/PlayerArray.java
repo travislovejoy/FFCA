@@ -107,11 +107,11 @@ public final class PlayerArray {
             return;
         }
 
-    public void addBench(String pos, String id, String name, String team,String teamName){
-        Teams.get(teamName).Bench.add(new Player("", id, name, team));
-        Teams.get(teamName).Roster.add(pos);
-        return;
-    }
+        public void addBench(String pos, String id, String name, String team,String teamName){
+            Teams.get(teamName).Bench.add(new Player("", id, name, team));
+            Teams.get(teamName).Roster.add("Bench");
+            return;
+        }
 
         public void addTeam(String teamName, int PY, int PTd, int PInt, int RY, int RTd, int RecTD, int RecY){
             //List<Player> PlayerList = new ArrayList<Player>();
@@ -195,6 +195,20 @@ public final class PlayerArray {
             }
             return true;
         }
+
+        public void setMaxRosterSize(String teamName){
+            int starters= PlayerArray.getInstance().Teams.get(teamName).Starters.size();
+            int bench=    PlayerArray.getInstance().Teams.get(teamName).Bench.size();
+            PlayerArray.getInstance().Teams.get(teamName).maxRosterSize= starters+ bench;
+            PlayerArray.getInstance().Teams.get(teamName).benchSize= bench;
+        }
+
+        public int getMaxRosterSize(String teamName){
+
+            return PlayerArray.getInstance().Teams.get(teamName).maxRosterSize;
+        }
+
+
 
 
 

@@ -113,23 +113,24 @@ public class CreateTeam extends TestDrawer {
                     }
                     PlayerArray.getInstance().addTeam(name, newPY, newPTd, newPInt, newRY, newRTd, newRecY, newRecTd);
                     for (int i = 0; i < qb; i++) {
-                        PlayerArray.getInstance().addPlayer("QB", "0", "", "", name);
+                        PlayerArray.getInstance().addPlayer("QB", null, "", "", name);
                     }
                     for (int i = 0; i < rb; i++) {
-                        PlayerArray.getInstance().addPlayer("RB", "0","","", name);
+                        PlayerArray.getInstance().addPlayer("RB", null,"","", name);
                     }
                     for (int i = 0; i < wr; i++) {
-                        PlayerArray.getInstance().addPlayer("WR", "0", "","", name);
+                        PlayerArray.getInstance().addPlayer("WR", null, "","", name);
                     }
                     for (int i = 0; i < te; i++) {
-                        PlayerArray.getInstance().addPlayer("TE", "0","","", name);
+                        PlayerArray.getInstance().addPlayer("TE", null,"","", name);
                     }
                     for (int i = 0; i < flex; i++) {
-                        PlayerArray.getInstance().addPlayer("Flex", "0", "","", name);
+                        PlayerArray.getInstance().addPlayer("Flex", null, "","", name);
                     }
                     for (int i = 0; i < bench; i++) {
-                        PlayerArray.getInstance().addBench("Bench", "1","","", name);
+                        PlayerArray.getInstance().addBench("Bench", null,"","", name);
                     }
+                    PlayerArray.getInstance().setMaxRosterSize(name);
                    Intent myIntent = new Intent(CreateTeam.this, TeamScore.class);
                     String week= "1";
                     myIntent.putExtra("week", week); //Optional parameters

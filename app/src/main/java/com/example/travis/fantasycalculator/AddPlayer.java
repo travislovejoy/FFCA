@@ -34,7 +34,7 @@ public class AddPlayer extends Activity {
     private ProgressDialog dialog = null;
     private String TAG="Connect";
     private String tag_json_array = "json_array_req";
-    private String URL = "http://192.168.0.6/getplayerinfo.php?id[]='*'";
+    private String URL = "http://192.168.0.10/getplayerinfo.php?id[]='*'";
     private static final String TAG_NAME = "name";
     private static final String TAG_ID = "id";
     private static final String TAG_POS = "pos";

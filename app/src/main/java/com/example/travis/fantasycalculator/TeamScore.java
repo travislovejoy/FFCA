@@ -52,7 +52,7 @@ public class TeamScore extends TestDrawer {
     private String STARTER = "starter";
     private String BENCH = "bench";
     private String tag_json_arry = "json_array_req";
-    private String url = "http://192.168.0.6";
+    private String url = "http://192.168.0.10";
     private String url_file = "/getplayerstats.php?";
     private static final String TAG_NAME = "name";
     private static final String TAG_POS = "pos";
@@ -335,12 +335,28 @@ public class TeamScore extends TestDrawer {
         ListViewAdapter adapter, adapter2;
         if (!mFlag) {
             mFlag = true;
+            boolean fullBench= true;
             mPosition = position;
             mStarter=Starter;
             //set_move_layout(lv, lv2, "Here");
+
             String currentTeam=PlayerArray.getInstance().currentTeam;
-            adapter= new ListViewAdapter(activity, PlayerArray.getInstance().Teams.get(currentTeam), !mFlag, true, lv, lv2);
-            adapter2= new ListViewAdapter(activity, PlayerArray.getInstance().Teams.get(currentTeam), !mFlag, false, lv, lv2);
+            Team team= PlayerArray.getInstance().Teams.get(currentTeam);
+
+            //if Bench is full add a blank slot to make it easier to set lineup
+
+            for(int i=0;i<team.Bench.size(); i++) {
+                if(team.Bench.get(i).id==null){
+                    fullBench=false;
+                }
+            }
+
+            if(fullBench) {
+                PlayerArray.getInstance().addBench("", null, "", "", currentTeam);
+            }
+            adapter= new ListViewAdapter(activity, team , !mFlag, true, lv, lv2);
+            adapter2= new ListViewAdapter(activity, team, !mFlag, false, lv, lv2);
+
             lv.setAdapter(adapter);
             ListUtils.setDynamicHeight(lv);
             lv2.setAdapter(adapter2);
@@ -364,6 +380,18 @@ public class TeamScore extends TestDrawer {
                 }
             //mFlag=false;
             String currentTeam=PlayerArray.getInstance().currentTeam;
+            Team team= PlayerArray.getInstance().Teams.get(currentTeam);
+
+            //Get rid of extra empty bench space that was previously added
+            if(team.Bench.size()>team.benchSize) {
+                for (int i = 0; i < team.Bench.size(); i++) {
+                    if(team.Bench.get(i).id==null){
+                        team.Bench.remove(i);
+                    }
+                }
+            }
+
+
             adapter= new ListViewAdapter(activity, PlayerArray.getInstance().Teams.get(currentTeam), !mFlag, true, lv, lv2);
             adapter2= new ListViewAdapter(activity, PlayerArray.getInstance().Teams.get(currentTeam), !mFlag, false, lv, lv2);
             lv.setAdapter(adapter);
