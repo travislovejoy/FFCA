@@ -11,8 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+
 
 /**
  * Created by Travis on 3/2/2016.
@@ -115,17 +114,34 @@ public class ListViewAdapter extends BaseAdapter {
 
                 @Override
                 public void onClick(View v) {
-
                     Intent myIntent = new Intent(activity, AddPlayer.class);
+                    if(starter) {
+                        if(team.Starters.get(pos).id==null&& team.RosterSize>= team.maxRosterSize){
+                            Toast.makeText(activity,"Too many players on roster",Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        else {
+
+                            myIntent.putExtra("type", "starter");
+                            myIntent.putExtra("position", team.Roster.get(pos));
+                        }
+                    }
+                    else{
+                        if(team.Bench.get(pos).id==null&& team.RosterSize>= team.maxRosterSize){
+                            Toast.makeText(activity,"Too many players on roster",Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        else {
+                            myIntent.putExtra("position", "Bench");
+                            myIntent.putExtra("type", "Bench");
+                        }
+
+                    }
+
                     myIntent.putExtra("pos", pos); //Optional parameters
                     myIntent.putExtra("teamName", PlayerArray.getInstance().currentTeam);
-                    myIntent.putExtra("position", team.Roster.get(pos));
-                   if(starter) {
-                       myIntent.putExtra("type", "starter" );
-                   }
-                    else{
-                       myIntent.putExtra("type", "Bench");
-                   }
+
+
                     TeamScore.editTeamFlag=false;
                     //ListViewAdapter.this.startActivity(myIntent);
                     activity.startActivity(myIntent);

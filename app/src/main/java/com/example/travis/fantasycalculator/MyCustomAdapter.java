@@ -4,6 +4,7 @@ package com.example.travis.fantasycalculator;
  * Created by Travis on 2/10/2016.
  */
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,12 +22,14 @@ import java.util.ArrayList;
 public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
     private ArrayList<String> list = new ArrayList<String>();
     private Context context;
+    private Activity activity;
 
 
 
-    public MyCustomAdapter(ArrayList<String> list, Context context) {
+    public MyCustomAdapter(ArrayList<String> list, Context context, Activity activity) {
         this.list = list;
         this.context = context;
+        this.activity= activity;
     }
 
     @Override
@@ -68,6 +71,7 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
                 PlayerArray.getInstance().deleteTeam(list.get(position));
                 list.remove(position); //or some other task
                 notifyDataSetChanged();
+                ((TestDrawer) activity).updateDrawer();
 
 
             }

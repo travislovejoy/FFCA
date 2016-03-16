@@ -26,6 +26,8 @@ public class TestDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     protected DrawerLayout drawer;
     private ArrayList<String> navDrawer;
+    private ArrayAdapter mAdapter;
+    private ListView mDrawerList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +41,8 @@ public class TestDrawer extends AppCompatActivity
         navDrawer= PlayerArray.getInstance().keysInArrayList();
         navDrawer.add("Create Team");
         navDrawer.add("Delete Team");
-        ListView mDrawerList = (ListView)findViewById(R.id.navList);
-        ArrayAdapter mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, navDrawer);
+        mDrawerList = (ListView)findViewById(R.id.navList);
+        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, navDrawer);
         mDrawerList.setAdapter(mAdapter);
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -109,6 +111,13 @@ public class TestDrawer extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    public void updateDrawer() {
+        navDrawer= PlayerArray.getInstance().keysInArrayList();
+        navDrawer.add("Create Team");
+        navDrawer.add("Delete Team");
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, navDrawer));
+
     }
 
     private void setActivity(int position){

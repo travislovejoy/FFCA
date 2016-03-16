@@ -32,7 +32,7 @@ public class DeleteTeam extends TestDrawer {
 
         ArrayList<String> list= new ArrayList<String>(Arrays.asList(keyArray));
 
-        MyCustomAdapter adapter = new MyCustomAdapter(list, this);
+        MyCustomAdapter adapter = new MyCustomAdapter(list,this, DeleteTeam.this);
 
         ListView lView = (ListView)findViewById(android.R.id.list);
         lView.setAdapter(adapter);

@@ -64,12 +64,18 @@ public final class PlayerArray {
 
         public void SwapId(int pos, String newId, String newName, String newTeam, String teamName, String type, String newPos){
             if (type.equals("starter")){
+                if(Teams.get(teamName).Starters.get(pos).id==null){
+                    Teams.get(teamName).RosterSize++;
+                }
                 Teams.get(teamName).Starters.get(pos).id=newId;
                 Teams.get(teamName).Starters.get(pos).position=newPos;
                 Teams.get(teamName).Starters.get(pos).name=newName;
                 Teams.get(teamName).Starters.get(pos).team=newTeam;
             }
             else{
+                if(Teams.get(teamName).Bench.get(pos).id==null){
+                    Teams.get(teamName).RosterSize++;
+                }
                 Teams.get(teamName).Bench.get(pos).id=newId;
                 Teams.get(teamName).Bench.get(pos).position=newPos;
                 Teams.get(teamName).Bench.get(pos).name=newName;
