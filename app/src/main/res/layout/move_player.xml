@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:text="Move"
             android:id="@+id/move"
-            android:singleLine="true"
+            android:singleLine="false"
             android:gravity="center"
             android:layout_gravity="right"
             android:textSize="14dp" />

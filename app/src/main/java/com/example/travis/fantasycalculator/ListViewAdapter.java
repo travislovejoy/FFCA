@@ -2,6 +2,8 @@ package com.example.travis.fantasycalculator;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,11 +33,12 @@ public class ListViewAdapter extends BaseAdapter {
     private static final String TAG_SCORE = "score";
     ListView lv, lv2;
     private boolean flag;
-    private boolean starter;
+    private boolean starter, mStarter;
+    private int mPosition;
 
 
     public ListViewAdapter(Activity activity,
-                           Team team, boolean flag, boolean starter, ListView lv, ListView lv2) {
+                           Team team, boolean flag, boolean starter, ListView lv, ListView lv2, int mPostion, boolean mStarter) {
         super();
         this.activity = activity;
         this.team = team;
@@ -43,6 +46,8 @@ public class ListViewAdapter extends BaseAdapter {
         this.starter=starter;
         this.lv=lv;
         this.lv2=lv2;
+        this.mPosition=mPostion;
+        this.mStarter=mStarter;
 
 
     }
@@ -97,11 +102,44 @@ public class ListViewAdapter extends BaseAdapter {
 
             holder.add= (Button) convertView.findViewById(R.id.addPlayer);
             holder.move = (Button) convertView.findViewById(R.id.move);
-            if(!flag) {
-                holder.move.setText("Here");
+            if(flag) {
+                //if flag is true set the move button text to "Move" and set ON Click listener
+                //for all buttons
+                holder.move.setText("Move");
+                holder.move.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+
+                        TeamScore.movePlayer(pos, starter, activity, lv, lv2);
+                    }
+                });
             }
             else{
-                holder.move.setText("Move");
+                //if flag is false check each position to see if it is a valid move. If move is valid
+                //set button text to "Here" and and Color to green. Also set onclick listener.
+                //If position does not pass test, set text to blank and don't set onclick listener
+                String P1= PlayerArray.getInstance().getpos(mPosition,PlayerArray.getInstance().currentTeam, mStarter);
+                String P2= PlayerArray.getInstance().getpos(pos, PlayerArray.getInstance().currentTeam, starter);
+                String R1= PlayerArray.getInstance().getRpos(mPosition, PlayerArray.getInstance().currentTeam, mStarter);
+                String R2= PlayerArray.getInstance().getRpos(pos, PlayerArray.getInstance().currentTeam, starter);
+                boolean check= PlayerArray.getInstance().checkPos(P1, P2, R1, R2, PlayerArray.getInstance().currentTeam );
+                if(check) {
+                    holder.move.setText("Here");
+                    holder.move.getBackground().setColorFilter(0xFF097A22, PorterDuff.Mode.MULTIPLY);
+                    holder.move.setTextColor(Color.WHITE);
+                    holder.move.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+
+                            TeamScore.movePlayer(pos, starter, activity, lv, lv2);
+                        }
+                    });
+                }
+                else{
+                    holder.move.setText("");
+                }
             }
 
 
@@ -114,6 +152,8 @@ public class ListViewAdapter extends BaseAdapter {
 
                 @Override
                 public void onClick(View v) {
+                    //ONClick listener for add button, sends you to add player class if you are not
+                    //over max Roster size
                     Intent myIntent = new Intent(activity, AddPlayer.class);
                     if(starter) {
                         if(team.Starters.get(pos).id==null&& team.RosterSize>= team.maxRosterSize){
@@ -148,14 +188,7 @@ public class ListViewAdapter extends BaseAdapter {
                 }
             });
 
-            holder.move.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-
-                    TeamScore.movePlayer(pos, starter, activity, lv, lv2);
-                }
-            });
 
 
 

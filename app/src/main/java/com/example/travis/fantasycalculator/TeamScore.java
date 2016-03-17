@@ -52,7 +52,7 @@ public class TeamScore extends TestDrawer {
     private String STARTER = "starter";
     private String BENCH = "bench";
     private String tag_json_arry = "json_array_req";
-    private String url = "http://192.168.0.10";
+    private String url = "http://192.168.0.6";
     private String url_file = "/getplayerstats.php?";
     private static final String TAG_NAME = "name";
     private static final String TAG_POS = "pos";
@@ -321,12 +321,12 @@ public class TeamScore extends TestDrawer {
 
     public  void set_move_Layout(ListView lv, ListView lv2, Team team, String status ){
         //ListView lv = (ListView) findViewById(R.id.starters);
-        ListViewAdapter adapter = new ListViewAdapter(TeamScore.this, team, !mFlag, true, lv, lv2);
+        ListViewAdapter adapter = new ListViewAdapter(TeamScore.this, team, !mFlag, true, lv, lv2, mPosition, mStarter);
         lv.setAdapter(adapter);
         ListUtils.setDynamicHeight(lv);
 
         //ListView lv2 = (ListView) findViewById(R.id.bench);
-        ListViewAdapter adapter2 = new ListViewAdapter(TeamScore.this, team, !mFlag, false, lv, lv2);
+        ListViewAdapter adapter2 = new ListViewAdapter(TeamScore.this, team, !mFlag, false, lv, lv2, mPosition, mStarter);
         lv2.setAdapter(adapter2);
         ListUtils.setDynamicHeight(lv2);
     }
@@ -354,8 +354,8 @@ public class TeamScore extends TestDrawer {
             if(fullBench) {
                 PlayerArray.getInstance().addBench("", null, "", "", currentTeam);
             }
-            adapter= new ListViewAdapter(activity, team , !mFlag, true, lv, lv2);
-            adapter2= new ListViewAdapter(activity, team, !mFlag, false, lv, lv2);
+            adapter= new ListViewAdapter(activity, team , !mFlag, true, lv, lv2, mPosition, mStarter);
+            adapter2= new ListViewAdapter(activity, team, !mFlag, false, lv, lv2, mPosition, mStarter);
 
             lv.setAdapter(adapter);
             ListUtils.setDynamicHeight(lv);
@@ -392,8 +392,8 @@ public class TeamScore extends TestDrawer {
             }
 
 
-            adapter= new ListViewAdapter(activity, PlayerArray.getInstance().Teams.get(currentTeam), !mFlag, true, lv, lv2);
-            adapter2= new ListViewAdapter(activity, PlayerArray.getInstance().Teams.get(currentTeam), !mFlag, false, lv, lv2);
+            adapter= new ListViewAdapter(activity, PlayerArray.getInstance().Teams.get(currentTeam), !mFlag, true, lv, lv2, mPosition, mStarter);
+            adapter2= new ListViewAdapter(activity, PlayerArray.getInstance().Teams.get(currentTeam), !mFlag, false, lv, lv2, mPosition, mStarter);
             lv.setAdapter(adapter);
             ListUtils.setDynamicHeight(lv);
             lv2.setAdapter(adapter2);
