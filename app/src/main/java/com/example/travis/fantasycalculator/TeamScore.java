@@ -109,19 +109,22 @@ public class TeamScore extends TestDrawer {
         });
 
 
-
+        //Edit Lineup Button Pressed
         editTeam=(Button)findViewById(R.id.editLineup);
         editTeam.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if(!editTeamFlag) {
+                            //Change to move layout player
                             editTeam.setText("Submit");
                             editTeamFlag = true;
                             ListView lv = (ListView) findViewById(R.id.starters);
                             ListView lv2 = (ListView) findViewById(R.id.bench);
                             String currentTeam = PlayerArray.getInstance().currentTeam;
                             set_move_Layout(lv, lv2, PlayerArray.getInstance().Teams.get(currentTeam), "Move");
+                            final TextView tv= (TextView) findViewById(R.id.total);
+                            tv.setText("");
                         }
                         else{
                             //Return to team score layout
@@ -138,6 +141,63 @@ public class TeamScore extends TestDrawer {
         update_score();
 
 
+    }
+    private String getDescription(JSONObject player, String position){
+        if(position.equals("QB")){
+            try {
+                String PY = player.getString("pass_yards");
+                String PTD= player.getString("pass_tds");
+                return PY+ " YDS, "+ PTD+ " TDS";
+            }
+            catch(JSONException e) {
+                e.printStackTrace();
+
+            }
+
+        }
+        else if(position.equals("RB")){
+            try {
+                String rush_yards = player.getString("rush_yards");
+                String rush_tds = player.getString("rush_tds");
+
+                return rush_yards+ " YDS, "+ rush_tds+ " TDS";
+
+            }
+            catch(JSONException e) {
+                e.printStackTrace();
+
+            }
+
+        }
+        else if(position.equals("WR")){
+            try {
+                int rec_yards = player.getInt("rec_yards");
+                int rec_tds = player.getInt("rec_tds");
+
+                return rec_yards+ " YDS, "+ rec_tds+ " TDS";
+
+
+            }
+            catch(JSONException e) {
+                e.printStackTrace();
+
+            }
+
+        }
+        else if(position.equals("Flex")){
+            try {
+                int rush_yards = player.getInt("rush_yards");
+                int rush_tds = player.getInt("rush_tds");
+
+                return rush_yards+ " YDS, "+ rush_tds+ " TDS";
+
+            }
+            catch(JSONException e) {
+                e.printStackTrace();
+
+            }
+        }
+        return "";
     }
 
     private int CalculateScore(JSONObject player, String team) {
@@ -184,7 +244,7 @@ public class TeamScore extends TestDrawer {
             starter_url = starter_url + "name[]=" + PlayerArray.getInstance().getBenchID(i, team) + "&";
         }
         starter_url += "week=" + week;
-        get_Data(starter_url, team, PlayerArray.getInstance().Size(team,true));
+        get_Data(starter_url, team, PlayerArray.getInstance().Size(team, true));
 
         dialog.dismiss();
 
@@ -216,17 +276,22 @@ public class TeamScore extends TestDrawer {
                         if(i<starterSize) {
                             String pos = PlayerArray.getInstance().getpos(i, team, true);
                             contact.put(TAG_POS, pos);
+                            String description = getDescription(jobj, pos);
+                            contact.put(TAG_DESCRIPTION, description);
                         }
                         else{
                             String pos = PlayerArray.getInstance().getpos(i-starterSize, team, false);
                             contact.put(TAG_POS, pos);
+                            String description= "";
+                            contact.put(TAG_DESCRIPTION, description);
+
                         }
-                        String description = "Not yet available";
+                        //String description = getDescription(jobj);
                         int score = CalculateScore(jobj, team);
                         String scores = Integer.toString(score);
                         contact.put(TAG_NAME, name);
 
-                        contact.put(TAG_DESCRIPTION, description);
+                        //contact.put(TAG_DESCRIPTION, description);
                         contact.put(TAG_SCORE, scores);
 
                         if(i<starterSize){
@@ -244,7 +309,10 @@ public class TeamScore extends TestDrawer {
 
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
+                    Toast.makeText(TeamScore.this, "Could not Connect",
+                            Toast.LENGTH_LONG).show();
                     e.printStackTrace();
+
                 }
                 ListAdapter adapter = new SimpleAdapter(
                        TeamScore.this, starterList,
@@ -261,6 +329,7 @@ public class TeamScore extends TestDrawer {
                 ListView lv2 = (ListView) findViewById(R.id.bench);
                 lv2.setAdapter(adapter2);
                 ListUtils.setDynamicHeight(lv2);
+
 
 
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -320,12 +389,12 @@ public class TeamScore extends TestDrawer {
     }
 
     public  void set_move_Layout(ListView lv, ListView lv2, Team team, String status ){
-        //ListView lv = (ListView) findViewById(R.id.starters);
+
         ListViewAdapter adapter = new ListViewAdapter(TeamScore.this, team, !mFlag, true, lv, lv2, mPosition, mStarter);
         lv.setAdapter(adapter);
         ListUtils.setDynamicHeight(lv);
 
-        //ListView lv2 = (ListView) findViewById(R.id.bench);
+
         ListViewAdapter adapter2 = new ListViewAdapter(TeamScore.this, team, !mFlag, false, lv, lv2, mPosition, mStarter);
         lv2.setAdapter(adapter2);
         ListUtils.setDynamicHeight(lv2);
@@ -334,11 +403,12 @@ public class TeamScore extends TestDrawer {
     public static void movePlayer(int position,boolean Starter, Activity activity, ListView lv, ListView lv2){
         ListViewAdapter adapter, adapter2;
         if (!mFlag) {
+            //First Player selected: Set Flags and record position, then reset the move player layout
             mFlag = true;
             boolean fullBench= true;
             mPosition = position;
             mStarter=Starter;
-            //set_move_layout(lv, lv2, "Here");
+
 
             String currentTeam=PlayerArray.getInstance().currentTeam;
             Team team= PlayerArray.getInstance().Teams.get(currentTeam);
@@ -363,22 +433,13 @@ public class TeamScore extends TestDrawer {
             ListUtils.setDynamicHeight(lv2);
         }
         else{
-                mFlag=false;
-                String P1= PlayerArray.getInstance().getpos(mPosition,PlayerArray.getInstance().currentTeam, mStarter);
-                String P2= PlayerArray.getInstance().getpos(position, PlayerArray.getInstance().currentTeam, Starter);
-                String R1= PlayerArray.getInstance().getRpos(mPosition, PlayerArray.getInstance().currentTeam, mStarter);
-                String R2= PlayerArray.getInstance().getRpos(position, PlayerArray.getInstance().currentTeam, Starter);
-                boolean check= PlayerArray.getInstance().checkPos(P1, P2, R1, R2, PlayerArray.getInstance().currentTeam );
-                if(check) {
-                    PlayerArray.getInstance().swap(mPosition, position, mStarter, Starter);
-                    //lv.invalidateViews();
-                    //lv2.invalidateViews();
-                }
-                else{
-                    Toast.makeText(activity, "Invalid Move",
-                            Toast.LENGTH_LONG).show();
-                }
-            //mFlag=false;
+            mFlag=false;
+            //Second Player selected: Make Lineup Change
+            PlayerArray.getInstance().swap(mPosition, position, mStarter, Starter);
+
+
+
+
             String currentTeam=PlayerArray.getInstance().currentTeam;
             Team team= PlayerArray.getInstance().Teams.get(currentTeam);
 
@@ -391,7 +452,7 @@ public class TeamScore extends TestDrawer {
                 }
             }
 
-
+            //Reset Move layout
             adapter= new ListViewAdapter(activity, PlayerArray.getInstance().Teams.get(currentTeam), !mFlag, true, lv, lv2, mPosition, mStarter);
             adapter2= new ListViewAdapter(activity, PlayerArray.getInstance().Teams.get(currentTeam), !mFlag, false, lv, lv2, mPosition, mStarter);
             lv.setAdapter(adapter);
@@ -404,26 +465,7 @@ public class TeamScore extends TestDrawer {
 
     }
 
-    public static class ListUtils {
-        public static void setDynamicHeight(ListView mListView) {
-            ListAdapter mListAdapter = mListView.getAdapter();
-            if (mListAdapter == null) {
-                // when adapter is null
-                return;
-            }
-            int height = 0;
-            int desiredWidth = View.MeasureSpec.makeMeasureSpec(mListView.getWidth(), View.MeasureSpec.UNSPECIFIED);
-            for (int i = 0; i < mListAdapter.getCount(); i++) {
-                View listItem = mListAdapter.getView(i, null, mListView);
-                listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-                height += listItem.getMeasuredHeight();
-            }
-            ViewGroup.LayoutParams params = mListView.getLayoutParams();
-            params.height = height + (mListView.getDividerHeight() * (mListAdapter.getCount() - 1));
-            mListView.setLayoutParams(params);
-            mListView.requestLayout();
-        }
-    }
+
 }
 
 
