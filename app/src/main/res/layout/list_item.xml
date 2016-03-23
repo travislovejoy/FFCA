@@ -42,7 +42,8 @@ android:orientation="vertical">
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="12/13, 220yds, 2TDs"
-            android:layout_gravity="center_horizontal|right" />
+            android:layout_gravity="center_horizontal|right"
+            android:textSize="12sp" />
 
     </LinearLayout>
 
