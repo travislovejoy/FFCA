@@ -34,7 +34,8 @@ public class AddPlayer extends Activity {
     private ProgressDialog dialog = null;
     private String TAG="Connect";
     private String tag_json_array = "json_array_req";
-    private String URL = "http://192.168.0.7/getplayerinfo.php?id[]='*'";
+    private String URL = PlayerArray.getInstance().ipAddress+"/getplayerinfo.php?id[]='*'";
+
     private static final String TAG_NAME = "name";
     private static final String TAG_ID = "id";
     private static final String TAG_POS = "pos";
@@ -167,8 +168,9 @@ public class AddPlayer extends Activity {
                         PlayerArray.getInstance().SwapId(value, player.get(TAG_ID), player.get(TAG_NAME), player.get(TAG_TEAM), teamName, type, player.get(TAG_POS));
 
                         //Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
-                        Intent myIntent = new Intent(AddPlayer.this, TeamScore.class);
 
+                        Intent myIntent = new Intent(AddPlayer.this, TeamScore.class);
+                        myIntent.putExtra("moveLayout", true);
                         AddPlayer.this.startActivity(myIntent);
 
                     }

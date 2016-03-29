@@ -52,7 +52,7 @@ public class TeamScore extends TestDrawer {
     private String STARTER = "starter";
     private String BENCH = "bench";
     private String tag_json_arry = "json_array_req";
-    private String url = "http://192.168.0.7";
+    private String url = PlayerArray.getInstance().ipAddress;
     private String url_file = "/getplayerstats.php?";
     private static final String TAG_NAME = "name";
     private static final String TAG_POS = "pos";
@@ -63,6 +63,7 @@ public class TeamScore extends TestDrawer {
     private static int mPosition;//position of first player selected to be moved
     private static boolean mStarter;// roster status of first player selected Starter/Bench
     public static boolean editTeamFlag= false;// flag set to true when edit lineup button selected
+    private static boolean initialDisplay;
 
 
     Button editTeam;
@@ -77,7 +78,9 @@ public class TeamScore extends TestDrawer {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_main, null, false);
         drawer.addView(contentView, 0);
-
+        initialDisplay= true;
+        Intent intent = getIntent();
+        boolean moveLayout=intent.getBooleanExtra("moveLayout", false);
         //Spinner adapter for weeks
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(
@@ -98,13 +101,19 @@ public class TeamScore extends TestDrawer {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                update_score();
+                if(!initialDisplay) {
+                    update_score();
+                }
+                else{
+                    initialDisplay=false;
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
                 // your code here
             }
+
 
         });
 
@@ -136,9 +145,13 @@ public class TeamScore extends TestDrawer {
                     }
                 });
 
+        if(moveLayout){
+            editTeam.performClick();
+        }
+        else {
+            update_score();
 
-
-        update_score();
+        }
 
 
     }
@@ -199,7 +212,7 @@ public class TeamScore extends TestDrawer {
                 description= receivingDescription(rec_yards,rec_tds, rec, description, false);
                 return description;
             }
-            else if(position.equals("WR")) {
+            else if(position.equals("WR")||position.equals("TE")) {
                 String description="";
                 description= passingDescription(pass_yards, pass_tds, description, false);
                 description= rushingDescription(rush_yards, rush_tds, description, false);
@@ -250,7 +263,6 @@ public class TeamScore extends TestDrawer {
 
         dialog.setMessage("Loading...");
         dialog.show();
-
         HashMap<String, String> params = new HashMap<String, String>();
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
 
@@ -352,49 +364,6 @@ public class TeamScore extends TestDrawer {
                 lv2.setAdapter(adapter2);
                 ListUtils.setDynamicHeight(lv2);
 
-
-
-                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position,
-                                            long id) {
-
-                        String item = Integer.toString(position);
-                        HashMap<String, String> player = (HashMap) parent.getItemAtPosition(position);
-                        String getPos = player.get(TAG_RPOS);
-
-                        //Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
-                        Intent myIntent = new Intent(TeamScore.this, AddPlayer.class);
-                        myIntent.putExtra("pos", position); //Optional parameters
-                        myIntent.putExtra("teamName", team);
-                        myIntent.putExtra("position", getPos);
-                        myIntent.putExtra("type", STARTER);
-                        //myIntent.putExtra("week", week);
-                        TeamScore.this.startActivity(myIntent);
-
-                    }
-                });
-
-                lv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position,
-                                            long id) {
-
-                        String item = Integer.toString(position);
-                        HashMap<String, String> player = (HashMap) parent.getItemAtPosition(position);
-                        String getPos = player.get(TAG_RPOS);
-
-                        //Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
-                        Intent myIntent = new Intent(TeamScore.this, AddPlayer.class);
-                        myIntent.putExtra("pos", position); //Optional parameters
-                        myIntent.putExtra("teamName", team);
-                        myIntent.putExtra("position", getPos);
-                        myIntent.putExtra("type", BENCH);
-                        //myIntent.putExtra("week", week);
-                        TeamScore.this.startActivity(myIntent);
-
-                    }
-                });
 
             }
         }, new Response.ErrorListener() {

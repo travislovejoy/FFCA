@@ -20,6 +20,7 @@ public final class PlayerArray {
         public HashMap<String, Team> Teams= new HashMap<>();
         public String week= "1";
         public String currentTeam;
+        public String ipAddress="http://192.168.0.11";
                     //PlayerList.add("00-0024334");
 
         public static PlayerArray getInstance() {
