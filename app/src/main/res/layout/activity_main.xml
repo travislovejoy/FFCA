@@ -1,24 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:fillViewport="true" >
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Team Name: "
-            android:id="@+id/Team" />
+            android:id="@+id/Team"
+            android:textSize="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true" />
+
+
+
+
+
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Lineup"
+            android:id="@+id/editLineup"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="wrap_content"
@@ -26,56 +48,57 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Week"
             android:id="@+id/textView"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/spinner"
+            android:layout_toStartOf="@+id/spinner" />
 
         <Spinner
             android:layout_width="74dp"
             android:layout_height="wrap_content"
             android:prompt="@string/week"
             android:id="@+id/spinner"
-            android:gravity="right" />
+            android:gravity="right"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Edit Lineup"
-            android:id="@+id/editLineup"
-            android:layout_gravity="right" />
+    </RelativeLayout>
 
-    </LinearLayout>
 
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true" >
         <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ListView
-            android:id="@+id/starters"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ListView
+                android:id="@+id/starters"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-        </RelativeLayout>
 
-    </LinearLayout>
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Total     "
         android:id="@+id/total"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_vertical|right"
+        android:layout_marginRight="30dp" />
 
     <ListView
         android:id="@+id/bench"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"/>
 
-
-
     </LinearLayout>
+    </ScrollView>
+</LinearLayout>
 
-</ScrollView>
