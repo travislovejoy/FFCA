@@ -95,7 +95,7 @@ public class TeamScore extends TestDrawer {
 
         //Current team text view
         final TextView tv = (TextView) findViewById(R.id.Team);
-        tv.setText("Team Name: " + PlayerArray.getInstance().currentTeam);
+        tv.setText(PlayerArray.getInstance().currentTeam);
 
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -339,7 +339,7 @@ public class TeamScore extends TestDrawer {
 
                     }
                     TextView text = (TextView) findViewById(R.id.total);
-                    text.setText("total   " + total);
+                    text.setText("Total   " + total);
 
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block

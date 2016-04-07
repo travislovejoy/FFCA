@@ -55,7 +55,7 @@
             android:layout_toStartOf="@+id/spinner" />
 
         <Spinner
-            android:layout_width="74dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:prompt="@string/week"
             android:id="@+id/spinner"
@@ -76,29 +76,45 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Starters"
+                android:id="@+id/TextView3"
+                android:layout_gravity="center_vertical|right"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:background="@android:color/darker_gray" />
             <ListView
                 android:id="@+id/starters"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total     "
+                android:id="@+id/total"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginRight="30dp" />
 
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Bench"
+                android:id="@+id/TextView4"
+                android:layout_gravity="center_vertical|right"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:background="@android:color/darker_gray" />
 
+            <ListView
+                android:id="@+id/bench"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
 
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Total     "
-        android:id="@+id/total"
-        android:layout_gravity="center_vertical|right"
-        android:layout_marginRight="30dp" />
-
-    <ListView
-        android:id="@+id/bench"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
-
-    </LinearLayout>
+        </LinearLayout>
     </ScrollView>
 </LinearLayout>
 
