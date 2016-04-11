@@ -95,8 +95,6 @@ public class CreateTeam extends TestDrawer {
                     int flex = Integer.valueOf(flexSpinner.getSelectedItem().toString());
                     int te = Integer.valueOf(teSpinner.getSelectedItem().toString());
                     int bench = Integer.valueOf(benchSpinner.getSelectedItem().toString());
-                    //String name = "default";
-                    //PlayerArray team= new PlayerArray(name);
 
                     int newPY= etConverter(PY);
                     int newPTd= etConverter(PTd);
@@ -133,8 +131,8 @@ public class CreateTeam extends TestDrawer {
                     PlayerArray.getInstance().setMaxRosterSize(name);
                    Intent myIntent = new Intent(CreateTeam.this, TeamScore.class);
                     String week= "1";
-                    myIntent.putExtra("week", week); //Optional parameters
-                    //myIntent.putExtra("teamName", name);
+                    myIntent.putExtra("week", week); //Set default week to 1
+
                    CreateTeam.this.startActivity(myIntent);
 
                 }

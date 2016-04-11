@@ -81,6 +81,7 @@ public class TeamScore extends TestDrawer {
         initialDisplay= true;
         Intent intent = getIntent();
         boolean moveLayout=intent.getBooleanExtra("moveLayout", false);
+
         //Spinner adapter for weeks
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(
@@ -156,84 +157,7 @@ public class TeamScore extends TestDrawer {
 
     }
 
-    String rushingDescription(int rush_yards, int rush_tds, String description, boolean RB) {
-        if (rush_yards > 10|| RB) {
-            description += Integer.toString(rush_yards) + " RYDS ";
-        }
-        if (rush_tds >= 1|| RB) {
-            description += Integer.toString(rush_tds) + " RTDS ";
 
-        }
-        return description;
-
-    }
-    String receivingDescription(int rec_yards, int rec_tds, int receptions, String description, boolean WR) {
-        if (rec_yards > 10|| WR) {
-            description += Integer.toString(rec_yards) + " RecYDS ";
-        }
-        if (rec_tds >= 1|| WR) {
-            description += Integer.toString(rec_tds) + " RecTDS ";
-
-        }
-        if(receptions>3||WR) {
-            description+= Integer.toString(receptions)+ " REC ";
-        }
-        return description;
-    }
-
-    String passingDescription(int pass_yards, int pass_tds, String description, boolean QB) {
-        if(pass_yards>25||QB) {
-            description += Integer.toString(pass_yards) + " PYDS ";
-        }
-        if (pass_tds >= 1||QB) {
-            description += Integer.toString(pass_tds) + " PTDS ";
-        }
-        return description;
-    }
-    private String getDescription(JSONObject player, String position){
-        try {
-            int pass_yards = player.getInt("pass_yards");
-            int pass_tds = player.getInt("pass_tds");
-            int rush_yards = player.getInt("rush_yards");
-            int rush_tds = player.getInt("rush_tds");
-            int rec_yards = player.getInt("rec_yards");
-            int rec_tds = player.getInt("rec_tds");
-            int rec = player.getInt("rec");
-            if (position.equals("QB")) {
-                String description="";
-                description= passingDescription(pass_yards, pass_tds, description, true);
-                description= rushingDescription(rush_yards, rush_tds, description, false);
-                return description;
-            }
-            else if(position.equals("RB")) {
-                String description="";
-                description= passingDescription(pass_yards, pass_tds, description, false);
-                description= rushingDescription(rush_yards, rush_tds, description, true);
-                description= receivingDescription(rec_yards,rec_tds, rec, description, false);
-                return description;
-            }
-            else if(position.equals("WR")||position.equals("TE")) {
-                String description="";
-                description= passingDescription(pass_yards, pass_tds, description, false);
-                description= rushingDescription(rush_yards, rush_tds, description, false);
-                description= receivingDescription(rec_yards,rec_tds, rec, description, true);
-                return description;
-            }
-            else if(position.equals("Flex")) {
-                String description="";
-                description= passingDescription(pass_yards, pass_tds, description, false);
-                description= rushingDescription(rush_yards, rush_tds, description, false);
-                description= receivingDescription(rec_yards,rec_tds, rec, description, false);
-                return description;
-            }
-
-        }
-        catch(JSONException e) {
-            e.printStackTrace();
-
-        }
-        return "";
-    }
 
     private int CalculateScore(JSONObject player, String team) {
         try {
@@ -263,9 +187,7 @@ public class TeamScore extends TestDrawer {
 
         dialog.setMessage("Loading...");
         dialog.show();
-        HashMap<String, String> params = new HashMap<String, String>();
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
-
         final String week = spinner.getSelectedItem().toString();
         PlayerArray.getInstance().week = week;
         final String team = PlayerArray.getInstance().currentTeam;
@@ -291,7 +213,6 @@ public class TeamScore extends TestDrawer {
 
             @Override
             public void onResponse(JSONObject response) {
-                //ArrayList<HashMap<String, String>> list;
                 starterList = new ArrayList<HashMap<String, String>>();
                 benchList= new ArrayList<HashMap<String, String>>();
                 Log.d(TAG, response.toString());
@@ -305,12 +226,11 @@ public class TeamScore extends TestDrawer {
                         HashMap<String, String> contact = new HashMap<String, String>();
                         JSONObject jobj = ja.getJSONObject(i);
                         String name = jobj.getString("name");
-                        //String pos=jobj.getString("pos");
                         contact.put(TAG_RPOS,PlayerArray.getInstance().getpos(i,team));
                         if(i<starterSize) {
                             String pos = PlayerArray.getInstance().getpos(i, team, true);
                             contact.put(TAG_POS, pos);
-                            String description = getDescription(jobj, pos);
+                            String description = ScoringDescription.getDescription(jobj, pos);
                             contact.put(TAG_DESCRIPTION, description);
                         }
                         else{
@@ -320,12 +240,10 @@ public class TeamScore extends TestDrawer {
                             contact.put(TAG_DESCRIPTION, description);
 
                         }
-                        //String description = getDescription(jobj);
+
                         int score = CalculateScore(jobj, team);
                         String scores = Integer.toString(score);
                         contact.put(TAG_NAME, name);
-
-                        //contact.put(TAG_DESCRIPTION, description);
                         contact.put(TAG_SCORE, scores);
 
                         if(i<starterSize){
@@ -380,7 +298,7 @@ public class TeamScore extends TestDrawer {
     }
 
     public  void set_move_Layout(ListView lv, ListView lv2, Team team, String status ){
-
+        //Changes List View Adapter when edit team is selected
         ListViewAdapter adapter = new ListViewAdapter(TeamScore.this, team, !mFlag, true, lv, lv2, mPosition, mStarter);
         lv.setAdapter(adapter);
         ListUtils.setDynamicHeight(lv);

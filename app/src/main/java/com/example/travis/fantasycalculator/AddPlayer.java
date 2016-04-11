@@ -35,15 +35,12 @@ public class AddPlayer extends Activity {
     private String TAG="Connect";
     private String tag_json_array = "json_array_req";
     private String URL = PlayerArray.getInstance().ipAddress+"/getplayerinfo.php?id[]='*'";
-
     private static final String TAG_NAME = "name";
     private static final String TAG_ID = "id";
     private static final String TAG_POS = "pos";
     private static final String TAG_DESCRIPTION = "description";
     private static final String TAG_TEAM = "team";
 
-
-    Button submit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +50,6 @@ public class AddPlayer extends Activity {
         final Integer value = intent.getIntExtra("pos", 0);
         final String teamName= intent.getStringExtra("teamName");
         final String type= intent.getStringExtra("type");
-        //weeks= intent.getStringExtra("week");
         final String pos= intent.getStringExtra("position");
         final Spinner teamSpinner = (Spinner) findViewById(R.id.teamSpinner);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(
@@ -73,14 +69,6 @@ public class AddPlayer extends Activity {
             }
 
         });
-
-        /*submit=(Button)findViewById(R.id.submit1);
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                update_player_list(value, teamName, pos, type);
-            }
-        });*/
 
         update_player_list(value, teamName, pos,type);
     }

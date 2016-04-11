@@ -16,12 +16,12 @@ public final class PlayerArray {
 
         private static PlayerArray instance = new PlayerArray();
 
-        //public List<Player> PlayerList = new ArrayList<Player>();
+
         public HashMap<String, Team> Teams= new HashMap<>();
         public String week= "1";
         public String currentTeam;
-        public String ipAddress="http://192.168.0.16";
-                    //PlayerList.add("00-0024334");
+        public String ipAddress="http://192.168.0.2";
+
 
         public static PlayerArray getInstance() {
 
@@ -31,15 +31,7 @@ public final class PlayerArray {
         }
 
         public PlayerArray() {
-            //PlayerList.add(Player("WR","00-0024334"));
-            //Teams.put(teamName,PlayerList);
 
-            //Player newplayer= new Player("WR","00-0024334");
-            //PlayerList.add("00-0027948");
-            //PlayerList.add(newplayer);
-            //newplayer= new Player("QB","00-0027948");
-            //PlayerList.add(newplayer);
-            //PlayerList.add(new Player("QB","0"));
         }
 
         public int Size(String teamName, boolean Starter){
@@ -52,15 +44,13 @@ public final class PlayerArray {
         }
 
         public String getID(int pos, String teamName){
-
-            //Player newplayer= PlayerList.get(pos);
+            //Get id of player from starters
             return Teams.get(teamName).Starters.get(pos).id;
         }
 
         public String getBenchID(int pos, String teamName){
-
-        //Player newplayer= PlayerList.get(pos);
-        return Teams.get(teamName).Bench.get(pos).id;
+            //Get id of player from bench
+            return Teams.get(teamName).Bench.get(pos).id;
         }
 
         public void SwapId(int pos, String newId, String newName, String newTeam, String teamName, String type, String newPos){
@@ -108,20 +98,21 @@ public final class PlayerArray {
     }
 
         public void addPlayer(String pos, String id, String name, String team, String teamName){
-
+            //Add new player to Starters
             Teams.get(teamName).Starters.add(new Player("", id, name, team));
             Teams.get(teamName).Roster.add(pos);
             return;
         }
 
         public void addBench(String pos, String id, String name, String team,String teamName){
+            //Add new player to Bench
             Teams.get(teamName).Bench.add(new Player("", id, name, team));
             Teams.get(teamName).Roster.add("Bench");
             return;
         }
 
         public void addTeam(String teamName, int PY, int PTd, int PInt, int RY, int RTd, int RecTD, int RecY){
-            //List<Player> PlayerList = new ArrayList<Player>();
+            //Create new Team and add to Team HashMap
             Team newTeam= new Team(PY, PTd, PInt, RY, RTd, RecY, RecTD);
             Teams.put(teamName, newTeam);
             currentTeam= teamName;
@@ -129,6 +120,7 @@ public final class PlayerArray {
         }
 
         public boolean checkKey(String teamName){
+            //Check to see if Team name already exists
             if(Teams.containsKey(teamName)){
                 return false;
             }
@@ -144,6 +136,7 @@ public final class PlayerArray {
         }
 
         public ArrayList<String> keysInArrayList(){
+            //Return an ArrayList of current team names
             Set<String> keys = Teams.keySet();
             String[] keyArray = keys.toArray(new String[keys.size()]);
             ArrayList<String> list= new ArrayList<String>(Arrays.asList(keyArray));
@@ -151,6 +144,7 @@ public final class PlayerArray {
         }
 
         public void swap(int mposition, int position, boolean mStarter, boolean Starter){
+            //Swap the positions of 2 players on the roster
             ArrayList<Player> tmp;
             Player temp;
             ArrayList<Player> second;
@@ -188,6 +182,7 @@ public final class PlayerArray {
 
         public boolean checkPos(String pos1, String pos2, String R1, String R2, String team){
             /*
+            Check to make sure that roster swap is valid
             pos1= The position of the first player selected
             pos2= The position of the second player selected
             R1= The position designated for the first slot
@@ -204,6 +199,7 @@ public final class PlayerArray {
         }
 
         public void setMaxRosterSize(String teamName){
+            //Set max Size of Roster and bench so they are not exceeded when adding player.
             int starters= PlayerArray.getInstance().Teams.get(teamName).Starters.size();
             int bench=    PlayerArray.getInstance().Teams.get(teamName).Bench.size();
             PlayerArray.getInstance().Teams.get(teamName).maxRosterSize= starters+ bench;

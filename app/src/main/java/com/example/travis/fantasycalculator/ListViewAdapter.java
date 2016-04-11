@@ -103,8 +103,8 @@ public class ListViewAdapter extends BaseAdapter {
             holder.add= (Button) convertView.findViewById(R.id.addPlayer);
             holder.move = (Button) convertView.findViewById(R.id.move);
             if(flag) {
-                //if flag is true set the move button text to "Move" and set ON Click listener
-                //for all buttons
+                /*if flag is true set the move button text to "Move" and set ON Click listener
+                for all buttons*/
                 holder.move.setText("Move");
                 holder.move.setOnClickListener(new View.OnClickListener() {
 
@@ -116,9 +116,9 @@ public class ListViewAdapter extends BaseAdapter {
                 });
             }
             else{
-                //if flag is false check each position to see if it is a valid move. If move is valid
-                //set button text to "Here" and and Color to green. Also set onclick listener.
-                //If position does not pass test, set text to blank and don't set onclick listener
+                /*if flag is false check each position to see if it is a valid move. If move is valid
+                set button text to "Here" and and Color to green. Also set onclick listener.
+                If position does not pass test, set text to blank and don't set onclick listener*/
                 String P1= PlayerArray.getInstance().getpos(mPosition,PlayerArray.getInstance().currentTeam, mStarter);
                 String P2= PlayerArray.getInstance().getpos(pos, PlayerArray.getInstance().currentTeam, starter);
                 String R1= PlayerArray.getInstance().getRpos(mPosition, PlayerArray.getInstance().currentTeam, mStarter);
@@ -183,7 +183,6 @@ public class ListViewAdapter extends BaseAdapter {
 
 
                     TeamScore.editTeamFlag=false;
-                    //ListViewAdapter.this.startActivity(myIntent);
                     activity.startActivity(myIntent);
                 }
             });

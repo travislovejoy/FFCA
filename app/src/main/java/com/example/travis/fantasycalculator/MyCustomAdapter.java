@@ -62,14 +62,13 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
 
         //Handle buttons and add onClickListeners
         Button deleteBtn = (Button)view.findViewById(R.id.deleteButton);
-        //Button addBtn = (Button)view.findViewById(R.id.add_btn);
+
 
         deleteBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                //do something
                 PlayerArray.getInstance().deleteTeam(list.get(position));
-                list.remove(position); //or some other task
+                list.remove(position);
                 notifyDataSetChanged();
                 ((TestDrawer) activity).updateDrawer();
 
