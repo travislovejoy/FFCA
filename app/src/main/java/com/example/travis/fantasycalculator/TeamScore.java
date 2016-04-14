@@ -48,7 +48,7 @@ import android.widget.Toast;
 public class TeamScore extends TestDrawer {
 
     private ProgressDialog dialog = null;
-    private String TAG = "Tutorial Connect";
+    private String TAG = "TeamScore Connect";
     private String STARTER = "starter";
     private String BENCH = "bench";
     private String tag_json_arry = "json_array_req";
@@ -159,7 +159,7 @@ public class TeamScore extends TestDrawer {
 
 
 
-    private int CalculateScore(JSONObject player, String team) {
+    public static int CalculateScore(JSONObject player, String team) {
         try {
             int pass_yards = player.getInt("pass_yards");
             int pass_tds = player.getInt("pass_tds");
@@ -202,7 +202,7 @@ public class TeamScore extends TestDrawer {
         starter_url += "week=" + week;
         get_Data(starter_url, team, PlayerArray.getInstance().Size(team, true));
 
-        dialog.dismiss();
+
 
     }
 
@@ -260,7 +260,6 @@ public class TeamScore extends TestDrawer {
                     text.setText("Total   " + total);
 
                 } catch (JSONException e) {
-                    // TODO Auto-generated catch block
                     Toast.makeText(TeamScore.this, "Could not Connect",
                             Toast.LENGTH_LONG).show();
                     e.printStackTrace();
@@ -281,6 +280,8 @@ public class TeamScore extends TestDrawer {
                 ListView lv2 = (ListView) findViewById(R.id.bench);
                 lv2.setAdapter(adapter2);
                 ListUtils.setDynamicHeight(lv2);
+
+                dialog.dismiss();
 
 
             }

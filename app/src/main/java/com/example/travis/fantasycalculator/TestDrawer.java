@@ -41,6 +41,7 @@ public class TestDrawer extends AppCompatActivity
         navDrawer= PlayerArray.getInstance().keysInArrayList();
         navDrawer.add("Create Team");
         navDrawer.add("Delete Team");
+        navDrawer.add("ScoreBoard");
         mDrawerList = (ListView)findViewById(R.id.navList);
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, navDrawer);
         mDrawerList.setAdapter(mAdapter);
@@ -102,6 +103,7 @@ public class TestDrawer extends AppCompatActivity
         navDrawer= PlayerArray.getInstance().keysInArrayList();
         navDrawer.add("Create Team");
         navDrawer.add("Delete Team");
+        navDrawer.add("ScoreBoard");
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, navDrawer));
 
     }
@@ -126,6 +128,10 @@ public class TestDrawer extends AppCompatActivity
                 String message= "No teams to display";
                 Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
             }
+        }
+        if (position-PlayerArray.getInstance().numberOfTeams()==2){
+            Intent myIntent = new Intent(TestDrawer.this, Scoreboard.class);
+            TestDrawer.this.startActivity(myIntent);
         }
         else{
             return;
