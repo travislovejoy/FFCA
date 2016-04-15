@@ -136,14 +136,14 @@ public class AddPlayer extends Activity {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-
+                dialog.dismiss();
                 ListAdapter adapter = new SimpleAdapter(
                         AddPlayer.this, list,
                         R.layout.player_info, new String[] { TAG_NAME, TAG_POS, TAG_DESCRIPTION, TAG_TEAM}, new int[] { R.id.name,
                         R.id.pos, R.id.description, R.id.team});
                 ListView lv = (ListView) findViewById(android.R.id.list);
                 lv.setAdapter(adapter);
-                dialog.dismiss();
+
 
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
