@@ -34,7 +34,7 @@ public class AddPlayer extends Activity {
     private ProgressDialog dialog = null;
     private String TAG="Connect";
     private String tag_json_array = "json_array_req";
-    private String URL = PlayerArray.getInstance().ipAddress+"/getplayerinfo.php?id[]='*'";
+    private String URL = PlayerArray.getInstance().ipAddress+"/getplayerinfo.php?";
     private static final String TAG_NAME = "name";
     private static final String TAG_ID = "id";
     private static final String TAG_POS = "pos";
@@ -83,6 +83,7 @@ public class AddPlayer extends Activity {
 
         final Spinner teamSpinner = (Spinner) findViewById(R.id.teamSpinner);
         String team = teamSpinner.getSelectedItem().toString();
+        String players="";
 
         //final Spinner posSpinner = (Spinner) findViewById(R.id.positionSpinner);
         //String pos = posSpinner.getSelectedItem().toString();
@@ -97,8 +98,19 @@ public class AddPlayer extends Activity {
         else{
             pos="'"+pos+"'";
         }
+        for (int i = 0; i < PlayerArray.getInstance().Size(teamName, true); i++) {
+            players += "'"+PlayerArray.getInstance().getID(i, teamName) + "'";
+            players+=",";
+        }
+        for (int i = 0; i < PlayerArray.getInstance().Size(teamName, false); i++) {
+            players += "'"+PlayerArray.getInstance().getBenchID(i, teamName) + "'";
+            if(i<PlayerArray.getInstance().Size(teamName,false)-1){
+                players+=",";
+            }
 
-        String new_URL= URL+ "&team="+ team;
+        }
+        String new_URL= URL+ "id="+players;
+        new_URL+= "&team="+ team;
 
         new_URL+="&pos="+pos;
 

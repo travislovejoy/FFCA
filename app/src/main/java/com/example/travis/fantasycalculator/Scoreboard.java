@@ -70,13 +70,14 @@ public class Scoreboard extends TestDrawer {
         final ArrayList<String> teamNames = PlayerArray.getInstance().keysInArrayList();
         final ListIterator<String> iterator = teamNames.listIterator();
         Teams = new ArrayList<HashMap<String, String>>();
-        for(final String names: teamNames) {
+        for(int x=0; x<teamNames.size(); x++) {
             Toast.makeText(Scoreboard.this, iterator.next(),
                     Toast.LENGTH_LONG).show();
             String newURL = url + url_file;
-
-            for (int i = 0; i < PlayerArray.getInstance().Size(names, true); i++) {
-                newURL = newURL + "name[]=" + PlayerArray.getInstance().getID(i, names) + "&";
+            final String team= teamNames.get(x);
+            final int index= x;
+            for (int i = 0; i < PlayerArray.getInstance().Size(team, true); i++) {
+                newURL = newURL + "name[]=" + PlayerArray.getInstance().getID(i, team) + "&";
             }
             newURL += "week=" + PlayerArray.getInstance().week;
 
@@ -97,22 +98,23 @@ public class Scoreboard extends TestDrawer {
                         for (int i = 0; i < ja.length(); i++) {
 
                             JSONObject player = ja.getJSONObject(i);
-                            total += TeamScore.CalculateScore(player, names);
+                            total += TeamScore.CalculateScore(player, team);
 
                         }
                         HashMap<String, String> contact = new HashMap<String, String>();
-                        contact.put(TAG_NAME, names);
+                        contact.put(TAG_NAME, team);
                         contact.put(TAG_SCORE, Integer.toString(total));
                         Teams.add(contact);
 
                         //Toast.makeText(Scoreboard.this, Teams.get(0).get(TAG_NAME),
                                 //Toast.LENGTH_LONG).show();
-
-                        ListAdapter lvAdapter = new SimpleAdapter(
-                                Scoreboard.this, Teams,
-                                R.layout.scores, new String[]{TAG_NAME, TAG_SCORE}, new int[]{R.id.Team, R.id.Score});
-                        ListView lv = (ListView) findViewById(R.id.scores);
-                        lv.setAdapter(lvAdapter);
+                        if(index==teamNames.size()-1) {
+                            ListAdapter lvAdapter = new SimpleAdapter(
+                                    Scoreboard.this, Teams,
+                                    R.layout.scores, new String[]{TAG_NAME, TAG_SCORE}, new int[]{R.id.Team, R.id.Score});
+                            ListView lv = (ListView) findViewById(R.id.scores);
+                            lv.setAdapter(lvAdapter);
+                        }
 
 
 
